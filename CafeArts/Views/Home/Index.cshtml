@@ -1,0 +1,201 @@
+﻿@using CafeArts.Models
+@{
+    ViewBag.Title = "Home Page";
+}
+<br />
+<br />
+<div class="carousel fade-carousel slide" data-ride="carousel" data-interval="4000" id="bs-carousel">
+    <!-- Overlay -->
+    <div class="overlay"></div>
+
+    <!-- Indicators -->
+    <ol class="carousel-indicators">
+        <li data-target="#bs-carousel" data-slide-to="0" class="active"></li>
+        <li data-target="#bs-carousel" data-slide-to="1"></li>
+        <li data-target="#bs-carousel" data-slide-to="2"></li>
+    </ol>
+
+    <!-- Wrapper for slides -->
+    <div class="carousel-inner">
+        <div class="item slides active">
+            <div class="slide-1"></div>
+            <div class="hero">
+                <hgroup>
+                    <h1 style="color: #165A72;">Clocks</h1>
+                    <h3 style="color: #165A72;">Get your personalized clocks</h3>
+                </hgroup>
+                <button style="border: 2px; border-color: #165A72;" class="btn btn-default" role="button">Shop now</button>
+            </div>
+        </div>
+        <div class="item slides">
+            <div class="slide-2"></div>
+            <div class="hero">
+                <hgroup>
+                    <h1 style="color: #165A72;">Coasters, Coasters, Everywhere!</h1>
+                    <h3 style="color: #165A72;">Get your personalized coasters</h3>
+                </hgroup>
+                <button style="border: 2px; border-color: #165A72;" class="btn btn-default" role="button">Shop now</button>
+            </div>
+        </div>
+        <div class="item slides">
+            <div class="slide-3"></div>
+            <div class="hero">
+                <hgroup>
+                    <h1 style="color: #165A72;">Choose your own colors</h1>
+                    <h3 style="color: #165A72;">Help us decide the colors by choosing one yourself</h3>
+                </hgroup>
+                <button style="border: 2px; border-color: #165A72;" class="btn btn-default" role="button">Shop now</button>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+<br />
+
+<!-- Featured -->
+<section class="section featured">
+    <div class="feature-title">
+        <h2 style="text-transform:uppercase;">Featured products</h2>
+    </div>
+    <div class="basic-grid">
+
+        @foreach (var Feat in ViewBag.Products)
+        {
+
+
+            if (Feat.IsFeatured && Feat.IsActive)
+            {
+
+                <div class="card-product">
+                    @if (Feat.RibbonStatus != null)
+                    {
+                        <span class="ribbon1" style="font-family:inherit">@Feat.RibbonStatus</span>
+
+                    }
+
+                    <a href="@Url.Action("ProductDetails","Product", new { id = Feat.Id })" style="text-decoration: none; height: 100%; width: 100%">
+                        <img src="@ByteArrayToImageConverter.Converter(Feat.ProductImage1)" alt="Product Image" style="height:100%; width:100%; object-fit:cover">
+                    </a>
+
+                    <a href="@Url.Action("ProductDetails","Product", new { id = Feat.Id })" style="text-decoration: none; color:black">
+                        <h1>@Feat.ProductName</h1>
+                    </a>
+
+                    <a href="@Url.Action("ProductDetails","Product", new { id = Feat.Id })" style="text-decoration: none; color:black">
+                        <p>"@Feat.ProductShortDescription"</p>
+                    </a>
+
+                    <a href="@Url.Action("ProductDetails","Product", new { id = Feat.Id })" style="text-decoration: none; color:black">
+                        <p class="price">&#8377 @Feat.ProductPrice</p>
+                    </a>
+
+                    <h5><button class="add-to-cart" onclick="location.href = '@Url.Action("AddToCart","Cart", new { id = Feat.Id})'">Add to cart</button></h5>
+                </div>
+
+
+            }
+
+            else
+            {
+                continue;
+            }
+
+
+        }
+
+
+    </div>
+</section>
+<br />
+<br />
+
+<!-- Categories -->
+
+<section class="section categories">
+    <div class="row">
+        <div class="col-md-12">
+            <a href="@Url.Action("Clocks","Product")">
+                <div class="category mid category-image-1">
+                    <h2>Clocks</h2>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <a href="@Url.Action("Coasters","Product")">
+                <div class="category mid category-image-2">
+                    <h2>Coasters</h2>
+                </div>
+            </a>
+        </div>
+    </div>
+
+</section>
+
+<!-- Testimonials -->
+<section class="section testimonials">
+    <div class="feature-title">
+        @*<h2 style="text-transform:uppercase;">Reviews</h2>*@
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="testimonial">
+                <div class="testimonial-body">
+                    <em>
+                        <p>
+                            "
+                            A review in 50 lines is something that everyone need. Absolutely best service that anyone could offer. Please find a way home from here! yours faithfully, Lucky"
+                        </p>
+                    </em>
+                    <i class="fas fa-quote-right"></i>
+                </div>
+                <div class="testimonial-footer">
+                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="user" />
+                    <h3>Alex Snow</h3>
+                    <h4>4 stars</h4>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="testimonial">
+                <div class="testimonial-body">
+                    <em>
+                        <p>
+                            "
+                            A review in 50 lines is something that everyone need. Absolutely best service that anyone could offer. Please find a way home from here! yours faithfully, Lucky"
+                        </p>
+                    </em>
+                    <i class="fas fa-quote-right"></i>
+                </div>
+                <div class="testimonial-footer">
+                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="user" />
+                    <h3>Alex Snow</h3>
+                    <h4>4 stars</h4>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="testimonial">
+                <div class="testimonial-body">
+                    <em>
+                        <p>
+                            "
+                            A review in 50 lines is something that everyone need. Absolutely best service that anyone could offer. Please find a way home from here! yours faithfully, Lucky"
+                        </p>
+                    </em>
+                    <i class="fas fa-quote-right"></i>
+                </div>
+                <div class="testimonial-footer">
+                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="user" />
+                    <h3>Alex Snow</h3>
+                    <h4>4 stars</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<br />

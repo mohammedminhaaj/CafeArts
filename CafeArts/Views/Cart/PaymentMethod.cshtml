@@ -1,0 +1,16 @@
+﻿@{
+    ViewBag.Title = "Payment Method";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<h2>Payment Method</h2>
+<h5>Please select one of the payment methods below</h5><br />
+<h6><a href="@Url.Action("MyCart","Cart")" style="text-decoration: none; color: #165A72">My Cart </a><i class="glyphicon glyphicon-chevron-right"></i> <a href="@Url.Action("ShippingInformation", "Cart")" style="text-decoration: none; color: #165A72">Shipping details</a> <i class="glyphicon glyphicon-chevron-right"></i> <a href="@Url.Action("PaymentMethod", "Cart")" style="text-decoration: none; color: #165A72">Payment</a></h6>
+<div class="btn-payment-method">
+    <button class="btn btn-default" style="outline: none" onclick="location.href = '@Url.Action("OrderSuccess","Cart")'"><span class="pull-left">Cash on delivery</span><span class="pull-right">Place order <i class="glyphicon glyphicon-arrow-right"></i></span></button>
+    <button class="btn btn-default" style="outline: none" onclick="location.href = '@Url.Action("OtherPayment","Cart")'"><span class="pull-left">Other payment options</span></button><br />
+</div>
+<small>(for payments via Netbanking, Debit card, Credit card, UPI and so on through RazorPay, a secure payment gateway)</small>
+

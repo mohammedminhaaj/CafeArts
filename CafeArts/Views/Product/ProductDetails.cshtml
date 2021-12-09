@@ -1,0 +1,356 @@
+﻿@using CafeArts.Models
+@using Microsoft.AspNet.Identity;
+@using System.Web.Security;
+@model CafeArts.ViewModels.ProductReviews
+
+
+@{
+    ViewBag.Title = "ProductDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+
+<br />
+<br />
+
+<div class="container">
+    <!-- product -->
+    <div class="product-content product-wrap clearfix">
+        <div class="row">
+            <div class="col-md-5 col-sm-12 col-xs-12">
+                <div class="product-image">
+                    <div id="myCarousel-2" class="carousel slide" style="height: 45rem; width:100%; box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23)">
+                        <ol class="carousel-indicators">
+
+
+                            @if (Model.Prods.ProductImage2 != null)
+                            {
+                                <li data-target="#myCarousel-2" data-slide-to="0" class="active"></li>
+                                <li data-target="#myCarousel-2" data-slide-to="1" class=""></li>
+                            }
+
+                            @if (Model.Prods.ProductImage3 != null)
+                            {
+                                <li data-target="#myCarousel-2" data-slide-to="2" class=""></li>
+                            }
+
+                            @if (Model.Prods.ProductImage4 != null)
+                            {
+                                <li data-target="#myCarousel-2" data-slide-to="3" class=""></li>
+                            }
+                        </ol>
+                        <div class="carousel-inner">
+                            @{
+
+
+                                if (Model.Prods.ProductImage1 != null)
+                                {
+                                    <!-- Slide 1 -->
+                                    <div class="item active">
+                                        <img src="@ByteArrayToImageConverter.Converter(Model.Prods.ProductImage1)" class="img-responsive" alt="Product image 1" style="height: 45rem; width:100%; object-fit:cover" />
+                                    </div>
+
+                                }
+
+                                if (Model.Prods.ProductImage2 != null)
+                                {
+
+                                    <!-- Slide 2 -->
+                                    <div class="item">
+                                        <img src="@ByteArrayToImageConverter.Converter(Model.Prods.ProductImage2)" class="img-responsive" alt="Product image 2" style="height: 45rem; width:100%; object-fit:cover" />
+                                    </div>
+
+                                }
+
+                                if (Model.Prods.ProductImage3 != null)
+                                {
+
+                                    <!-- Slide 3 -->
+                                    <div class="item">
+                                        <img src="@ByteArrayToImageConverter.Converter(Model.Prods.ProductImage3)" class="img-responsive" alt="Product image 3" style="height: 45rem; width:100%; object-fit:cover" />
+                                    </div>
+
+                                }
+
+                                if (Model.Prods.ProductImage4 != null)
+                                {
+
+                                    <!-- Slide 4 -->
+                                    <div class="item">
+                                        <img src="@ByteArrayToImageConverter.Converter(Model.Prods.ProductImage4)" class="img-responsive" alt="Product image 4" style="height: 45rem; width:100%; object-fit:cover" />
+                                    </div>
+
+                                }
+
+
+
+                            }
+
+
+                        </div>
+                        @if (Model.Prods.ProductImage2 != null || Model.Prods.ProductImage3 != null || Model.Prods.ProductImage4 != null)
+                        {
+                            <a class="left carousel-control" href="#myCarousel-2" data-slide="prev"> <span class="glyphicon glyphicon-chevron-left"></span> </a>
+                            <a class="right carousel-control" href="#myCarousel-2" data-slide="next"> <span class="glyphicon glyphicon-chevron-right"></span> </a>
+                        }
+
+                    </div>
+                </div>
+
+
+            </div>
+
+            <div class="col-md-6 col-md-offset-1 col-sm-12 col-xs-12">
+                <h2 class="name">
+                    @Model.Prods.ProductName
+                    @*<small>Product by <a href="javascript:void(0);">Adeline</a></small>
+
+                        <span class="fa fa-2x"><h5>(109) Votes</h5></span>*@
+
+                </h2>
+
+                @{
+                    ViewBag.LikeCount = 0;
+                    ViewBag.ReviewCount = 0;
+                }
+
+                @foreach (var count in ViewBag.ReviewList)
+                {
+                    if (count.IsValid && count.ProdID == Model.Prods.Id)
+                    {
+                        if (count.Rating == "Like") { ViewBag.LikeCount++; }
+
+                        ViewBag.ReviewCount++;
+                    }
+
+                }
+
+                @{
+                    if (ViewBag.ReviewCount == 1)
+                    {
+                        <p>@ViewBag.ReviewCount user review</p>
+                    }
+                    else
+                    {
+                        <p>@ViewBag.ReviewCount user reviews</p>
+                    }
+                }
+
+
+
+                @{
+
+                    if (ViewBag.LikeCount != 0)
+                    {
+                        if (ViewBag.LikeCount == 1)
+                        {
+                            <p style="color:gray"><small>&#10084 @ViewBag.LikeCount like</small></p>
+                        }
+
+                        else
+                        {
+                            <p style="color:gray"><small>&#10084 @ViewBag.LikeCount likes</small></p>
+                        }
+                    }
+                }
+
+                @*<div class="ratings">
+                        <span class="fa fa-star-o"></span>
+                        <span class="fa fa-star-o"></span>
+                        <span class="fa fa-star-o"></span>
+                        <span class="fa fa-star-o"></span>
+                        <span class="fa fa-star-o"></span>
+                    </div>*@
+
+                <hr />
+                <h3 class="price-container">
+                    &#8377 @Model.Prods.ProductPrice <small style="font-size:15px">*Inclusive of all taxes</small><br />
+
+                </h3>
+
+                @{
+
+                    if (Model.Prods.ProductQuantity < 5)
+                    {
+                        if (Model.Prods.ProductQuantity == 1)
+                        {
+                            <h5 style="color: #CA0020">Only @Model.Prods.ProductQuantity unit left!</h5>
+                        }
+                        else
+                        {
+                            <h5 style="color: #CA0020">Only @Model.Prods.ProductQuantity units left!</h5>
+                        }
+
+                    }
+                    else
+                    {
+                        <h5 style="color: #0571B0">In stock</h5>
+                    }
+
+                }
+
+
+                @if (Model.Prods.IsActive)
+                {
+                    <br />
+                    <h5>Quantity: <input type="number" class="text-center quantity" value="1" min="1" max="@Model.Prods.ProductQuantity"></h5>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6 col-lg-6">
+                            <button class="add-to-cart js-add">Add to cart</button>
+                        </div>
+
+                    </div>
+                }
+
+                <br />
+
+                <div class="description description-tabs">
+                    <ul id="myTab" class="nav nav-tabs">
+
+                        <li class="active"><a href="#more-information" data-toggle="tab" class="no-margin" style="color: inherit">Product Description</a></li>
+                        <li class=""><a href="#reviews" data-toggle="tab" style="color: inherit">Reviews</a></li>
+
+
+                    </ul>
+                    <div id="myTabContent" class="tab-content">
+                        <div class="tab-pane fade active in" id="more-information">
+                            <br />
+                            <strong style="font-size:25px">About this product...</strong>
+                            <p>
+                                @Model.Prods.ProductDescription
+                            </p>
+                        </div>
+
+                        <div class="tab-pane fade" id="reviews">
+                            <br />
+
+                            <strong style="font-size:25px">Your review matters a lot...</strong>
+
+
+                            @{
+
+                                if (User.Identity.IsAuthenticated)
+                                {
+                                    using (Html.BeginForm("PostReview", "Product", FormMethod.Post))
+                                    {
+                                        @Html.ValidationSummary(false);
+
+                                        <label>Do you like this product?</label><br />
+                                        <label style="font-weight:normal"><span>Yes</span></label>
+                                        @Html.RadioButtonFor(m => m.Revs.Rating, "Like")
+                                        <label style="font-weight:normal">&emsp;<span>No</span></label>
+                                        @Html.RadioButtonFor(m => m.Revs.Rating, "Dislike")
+                                        <label style="font-weight:normal">&emsp;<span>Maybe</span></label>
+                                        @Html.RadioButtonFor(m => m.Revs.Rating, "Neutral")<br /><br />
+                                        @Html.LabelFor(m => m.Revs.ReviewData)
+                                        @Html.TextAreaFor(m => m.Revs.ReviewData, new { placeholder = "Write your review here", @class = "form-control" })<br />
+                                        @Html.ValidationMessageFor(m => m.Revs.ReviewData)
+                                        @Html.HiddenFor(m => m.Prods.Id)
+                                        @Html.ValidationMessageFor(m => m.Prods.Id)
+                                        @Html.HiddenFor(m => m.Prods.IsActive)
+                                        @Html.HiddenFor(m => m.Prods.IsFeatured)
+                                        @Html.HiddenFor(m => m.Prods.ProductDescription)
+                                        @Html.HiddenFor(m => m.Prods.ProductName)
+                                        @Html.HiddenFor(m => m.Prods.ProductPrice)
+                                        @Html.HiddenFor(m => m.Prods.ProductQuantity)
+                                        @Html.HiddenFor(m => m.Prods.ProductShortDescription)
+                                        @Html.AntiForgeryToken()
+
+
+
+                                        <button type="submit" class="btn btn-default" style="font-family:inherit">Submit</button>
+                                    }
+                                }
+
+                                else
+                                {
+                                    <p><strong>Please @Html.ActionLink("log in", "Login", "Account", new { returnUrl = Url.IsLocalUrl(Request.RawUrl) ? Request.RawUrl : null }, htmlAttributes: new { id = "loginLink" }) to post a review</strong></p>
+                                }
+                            }
+
+
+                            <hr />
+
+                            @foreach (var RevList in ViewBag.ReviewList)
+                            {
+                                <ul>
+                                    @if (RevList.IsValid && RevList.ProdID == Model.Prods.Id)
+                                    {
+
+                                        <li style="list-style-type:none">
+
+                                            <h5 style="color: #165A72" class="mr-2">
+                                                @RevList.ApplicationUsers.FirstName @RevList.ApplicationUsers.LastName
+
+                                                @if (RevList.Rating != null)
+                                                {
+                                                    if (RevList.Rating == "Like")
+                                                    {<small>(rated <span class="glyphicon glyphicon-thumbs-up" style="color:blue"></span>)</small> }
+                                                    else if (RevList.Rating == "Dislike")
+                                                    { <small>(rated <span class="glyphicon glyphicon-thumbs-down" style="color:red"></span>)</small>}
+                                                    else
+                                                    { <small>(rated <span>&#129300</span>)</small>}
+
+                                                }
+
+                                            </h5>
+                                            @if (User.Identity.GetUserId() == RevList.MemberID)
+                                            {
+                                                <small>
+                                                    @Html.ActionLink("Delete", "DeleteReview", "Product", new { id = RevList.ReviewId }, new { @class = "pull-right" })
+                                                </small>
+                                            }
+
+                                            <span class="mb-1 ml-2"><small>@TimeElapsed.GetTime(RevList.ReviewCreatedDate)</small></span>
+                                            @if (RevList.ReviewData != null)
+                                            {<div class="comment-text-sm"><span>" @RevList.ReviewData "</span></div>}
+
+                                            <hr />
+
+                                        </li>
+
+                                    }
+                                </ul>
+
+                            }
+
+
+                        </div>
+                    </div>
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
+    <!-- end product -->
+</div>
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            $('.quantity').on('change', function () {
+                var max = parseInt($(this).attr('max'));
+                var min = parseInt($(this).attr('min'));
+                if ($(this).val() > max) {
+                    $(this).val(max);
+                }
+                else if ($(this).val() < min) {
+                    $(this).val(min);
+                }
+
+            });
+
+            $('.js-add').on('click', function () {
+                var url = '@Url.Action("AddToCart", "Cart")';
+                var value = $('.quantity').val();
+                window.location.href = url + '?id=' + @Model.Prods.Id+"&quantity=" + value;
+            });
+        });
+    </script>
+}
+

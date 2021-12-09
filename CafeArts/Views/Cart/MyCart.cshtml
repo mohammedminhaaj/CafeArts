@@ -1,0 +1,135 @@
+﻿@model IEnumerable<CafeArts.Models.Cart>
+@using CafeArts.Models
+@using System.Globalization;
+
+@{
+    ViewBag.Title = "My Cart";
+    ViewBag.TotalPrice = 0;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+
+<h2 class="display-5 mb-2">My Cart</h2>
+<h5>Here you can find the list of products present in your cart</h5><br />
+
+
+
+@if (TempData.ContainsKey("Message"))
+{
+    <b class="text-success">@TempData["Message"]</b>
+}
+
+@{ if (!Model.Any())
+    {
+        <h3>There are currently no products added in your cart</h3>
+        <br />
+        <a href="@Url.Action("All", "Product")" class="btn btn-default">Add products</a>
+    }
+    else
+    {
+
+        <table class="table table-hover table-condensed" id="cart">
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (var cart in Model)
+                {
+
+                    <tr>
+                        <td data-th="Product">
+                            <div class="row">
+                                <div class="col-md-3 text-left">
+                                    <a href="@Url.Action("ProductDetails", "Product", new { id = cart.ProductID })" style="text-decoration: none; height: 100px; width: 100px">
+                                        <img src="@ByteArrayToImageConverter.Converter(cart.Product.ProductImage1)" alt="Product image" style="height:100px; width:100px; border-radius: 10px">
+                                        </a>
+                                </div>
+                                <div class="col-md-9 text-left mt-sm-2">
+                                    <a href="@Url.Action("ProductDetails", "Product", new { id = cart.ProductID })" style="text-decoration: none; color:black">
+                                        <h4>@cart.Product.ProductName</h4>
+                                    </a>
+                                    <small>@cart.Product.ProductShortDescription</small>
+                                </div>
+                            </div>
+                        </td>
+                        <td data-th="Price"><span>&#8377;</span>@cart.Product.ProductPrice</td>
+                        @{
+                            ViewBag.TotalPrice += cart.Product.ProductPrice * cart.Quantity;
+                        }
+                        <td data-th="Quantity">
+                            <a href="@Url.Action("ProductDetails", "Product", new { id = cart.ProductID })" style="text-decoration: none; color:black">
+                                <small>x</small>@cart.Quantity
+                                </a>
+</td>
+                        <td class="actions" data-th="">
+                            <div class="text-right">
+
+                                <button class="btn btn-default" onclick="location.href = '@Url.Action("DeleteFromCart","Cart", new {id = cart.CartID})'">
+                                    <i class="glyphicon glyphicon-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <div class="float-right text-right">
+            <h4>Subtotal:</h4>
+            <h2>@ViewBag.TotalPrice.ToString("C")</h2>
+            <h5><small>*Tax included and shipping is calculated at the checkout</small></h5><br />
+
+        </div>
+
+        @*<div class="row">
+            <div class="float-right text-right">
+                <a href="catalog.html" class="btn btn-primary"><i class="glyphicon glyphicon-arrow-right"></i> Proceed to checkout</a>
+            </div>
+
+            <div class="float-left text-left">
+                <a class="btn btn-primary" href="">Continue Shopping</a>
+            </div>
+        </div>*@
+
+        <div class="row">
+            <div class="col-xs-6 text-left">
+                <div class="previous">
+                    <a class="btn btn-secondary" href="@Url.Action("All","Product")"style="font-size:15px"><i class="glyphicon glyphicon-arrow-left"></i> Update cart</a>
+                </div>
+            </div>
+            <div class="col-xs-6 text-right">
+                <div class="next">
+                    <a href="@Url.Action("ShippingInformation","Cart")" class="btn btn-primary" style="font-size:15px"><i class="glyphicon glyphicon-arrow-right"></i> Checkout</a>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+    }
+
+}
+
+
+
+
+
+
+
+
+
+
+

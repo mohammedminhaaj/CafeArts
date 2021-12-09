@@ -1,0 +1,69 @@
+﻿@model IEnumerable<CafeArts.Models.Category>
+@{
+    ViewBag.Title = "Categories";
+    Layout = "~/Views/Shared/Admin_LayoutPage.cshtml";
+}
+
+
+
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Categories</h1>
+</div>
+
+@Html.ActionLink("Add Category", "AddCategory", "Admin", new { @class = "btn btn-primary" })
+
+<br />
+<br />
+
+
+<table class="table table-bordered table-hover" width="100%">
+
+
+
+    @if (!Model.Any())
+    {
+        <tbody>
+            <tr>
+                <td>There are no @ViewBag.Title added</td>
+            </tr>
+        </tbody>
+    }
+
+    else
+    {
+        <thead>
+            <tr>
+                <th>Category ID</th>
+                <th>Category Name</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+        foreach (var item in Model)
+        {
+            <tbody>
+                <tr>
+                    <td>
+                        @item.CategoryID
+                    </td>
+                    <td>
+                        @item.CategoryName
+                    </td>
+                    <td>                      
+                    
+                        @Html.ActionLink("Edit", "ModifyCategory", "Admin", new { id = item.CategoryID }, new { @class = "btn btn-primary" })
+
+
+                        @*<button type="button" class="btn btn-primary" value="UpdateCategory" onclick="location.href = '@Url.Action("UpdateCategory(item.CategoryID)","Admin")'">Edit</button>*@
+                    </td>
+
+
+                </tr>
+            </tbody>
+
+
+
+
+        }
+    }
+</table>

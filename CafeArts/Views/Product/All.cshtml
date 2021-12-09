@@ -1,0 +1,67 @@
+﻿@model IEnumerable<CafeArts.Models.ProductModels>
+@using CafeArts.Models
+@{
+    ViewBag.Title = "All products";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<br />
+<h2>Search all products</h2>
+<br />
+
+@using (Html.BeginForm("All", "Product", FormMethod.Get))
+{
+
+    <div class="form-group">
+        <div class="input-group">
+            <input class="form-control" placeholder="Search products" type="text" name="search" style="max-width:100%">
+            <span class="input-group-btn">
+                <button class="btn btn-default" type="submit" value="search"><span class="glyphicon glyphicon-search"></span></button>
+            </span>
+        </div>
+    </div>
+
+}
+
+@if (!Model.Any())
+{
+    <h3>@ViewBag.SearchResult</h3>
+}
+<div class="basic-grid">
+
+    @foreach (var products in Model)
+    {
+
+        <div class="card-product">
+
+            @if (products.RibbonStatus != null)
+            {
+
+                <span class="ribbon1" style="font-family:inherit">@products.RibbonStatus</span>
+
+            }
+
+            <a href="@Url.Action("ProductDetails","Product", new { id = products.Id })" style="text-decoration: none; height: 100%; width: 100%">
+                <img src="@ByteArrayToImageConverter.Converter(products.ProductImage1)" alt="Product image" style="height: 100%; width: 100%; object-fit:cover">
+            </a>
+            <a href="@Url.Action("ProductDetails","Product", new { id = products.Id })" style="text-decoration: none; color:black">
+                <h1 style="width:100%">@products.ProductName</h1>
+            </a>
+            <a href="@Url.Action("ProductDetails","Product", new { id = products.Id })" style="text-decoration: none; color:black">
+                <p>"@products.ProductShortDescription"</p>
+            </a>
+
+            <a href="@Url.Action("ProductDetails","Product", new { id = products.Id })" style="text-decoration: none; color:black">
+                <p class="price">&#8377 @products.ProductPrice</p>
+            </a>
+
+
+            <h5><button class="add-to-cart" onclick="location.href = '@Url.Action("AddToCart","Cart", new { id = products.Id})'">Add to cart</button></h5>
+
+
+        </div>
+
+
+    }
+
+
+</div>

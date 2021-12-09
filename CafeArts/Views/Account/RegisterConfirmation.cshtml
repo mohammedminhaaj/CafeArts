@@ -1,0 +1,22 @@
+﻿
+@{
+    ViewBag.Title = "RegisterConfirmation";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<hgroup class="title">
+    <h1>A confirmation mail has been sent to your email address</h1>
+</hgroup>
+
+<div>
+    <p>
+        Please click on the link sent to your email address to verify this account.<br /><br />
+
+        Please check your spam folder if you haven't received the mail.<br /><br />
+
+        @Html.ActionLink("Contact us", "Contact", "Home") for more help.<br /><br />
+
+        <a href="@Url.Action("Index", "Home")" class="btn btn-default">Home</a>
+    </p>
+</div>
+

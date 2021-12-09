@@ -1,0 +1,166 @@
+﻿@model CafeArts.Models.ShippingDetails
+
+@{
+    ViewBag.Title = "Shipping Information";
+    ViewBag.SubTotal = 0;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<h2>Shipping Information</h2>
+
+@{
+    if (ViewBag.CountItems == 1)
+    {
+        <h5>Please enter the details below in order for us to deliver this beautiful product <span style="color: red">&#10084;</span></h5>
+    }
+    else
+    {
+        <h5>Please enter the details below in order for us to deliver these beautiful products <span style="color: red">&#10084;</span></h5>
+    }
+}
+
+<br />
+<h6><a href="@Url.Action("MyCart","Cart")" style="text-decoration: none; color: #165A72">My Cart </a><i class="glyphicon glyphicon-chevron-right"></i> <a href="@Url.Action("ShippingInformation", "Cart")" style="text-decoration: none; color: #165A72">Shipping details</a> <i class="glyphicon glyphicon-chevron-right"></i> <span style="color:gray">Payment</span></h6>
+
+<div id="accordion">
+    <div class="card">
+        <div class="card-header" id="order-summary">
+            <h5 class="mb-0">
+                <button class="btn btn-secondary collapsed" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne" style="width:100%; outline:none">
+                    <span class="pull-left">Show order summary&emsp;<small><i class="glyphicon glyphicon-chevron-down"></i></small></span> <span class="pull-right">@ViewBag.CartItemSubTotal.ToString("C")</span>
+                </button>
+            </h5>
+        </div>
+
+        <div id="collapseOne" class="collapse" aria-labelledby="order-summary" data-parent="#accordion">
+            <div class="card-body">
+                <strong style="font-size:25px">Here is your order summary...</strong>
+                <hr />
+
+                <ul>
+                    @foreach (var items in ViewBag.CartDetails)
+                    {
+
+                        <li style="list-style-type: decimal; color: #165A72">
+
+
+                            <h7 style="color: #165A72">@items.Product.ProductName (<small>x</small>@items.Quantity) - @items.Product.ProductPrice.ToString("C")</h7>
+
+                            <div style="width:50%">
+                                <hr />
+                            </div>
+                        </li>
+
+                    }
+                </ul>
+
+                <div class="float-right text-right">
+                    <h4>Subtotal:</h4>
+                    <h2>@ViewBag.CartItemSubTotal.ToString("C")</h2>
+                    <h5><small>*Price calculated after shipping charges</small></h5><br />
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<strong style="font-size:25px">Contact Information</strong>
+<br />
+<br />
+<p style="margin-bottom: 0px; color: #165A72"><b>@ViewBag.UserDetails.FirstName @ViewBag.UserDetails.LastName</b></p>
+<small>(@ViewBag.UserDetails.Email)</small>
+<hr />
+
+<strong style="font-size:25px">Shipping Address</strong>
+<br />
+<br />
+@using (Html.BeginForm("SaveShippingAddress", "Cart", FormMethod.Post))
+{
+    <div class="form-group-sm">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="row">
+            <div class="col-sm-4">
+                @Html.LabelFor(m => m.FName)
+                @Html.TextBoxFor(m => m.FName, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.FName)<br />
+            </div>
+            <div class="col-sm-4">
+                @Html.LabelFor(m => m.LName)
+                @Html.TextBoxFor(m => m.LName, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.LName)<br />
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-8">
+                @Html.LabelFor(m => m.Address)
+                @Html.TextAreaFor(m => m.Address, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.Address)<br />
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-6 col-md-4">
+                @Html.LabelFor(m => m.City)
+                @Html.TextBoxFor(m => m.City, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.City)<br />
+            </div>
+            <div class="col-6 col-md-4">
+                @Html.LabelFor(m => m.StateID)
+                @Html.DropDownListFor(m => m.StateID, new SelectList(ViewBag.StateList, "StateKey", "StateName"), "", new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.StateID)<br />
+            </div>
+            <div class="col-6 col-md-4">
+                @Html.LabelFor(m => m.ZipCode)
+                @Html.TextBoxFor(m => m.ZipCode, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.ZipCode)<br />
+            </div>
+        </div>
+
+
+
+        <p><small>*Currently, we are only shipping products within India.</small></p><br />
+
+
+
+        @Html.LabelFor(m => m.PhoneNumber)
+        @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.PhoneNumber)<br />
+        @Html.HiddenFor(m => m.ShippingDetailsID)
+        @Html.ValidationMessageFor(m => m.ShippingDetailsID)<br />
+
+        @Html.LabelFor(m => m.ShippingType)<br />
+
+
+        <div class="shipping-box">
+            <div class="custom-control custom-radio">
+                @Html.RadioButtonFor(m => m.ShippingType, "Free", new { @checked = "checked" })
+                <label style="font-weight:normal">Free shipping</label>
+            </div>
+        </div>
+
+        @Html.AntiForgeryToken()<br />
+    </div>
+
+    <div class="row">
+        <div class="col-xs-6">
+            <div class="previous">
+                <a class="btn btn-secondary pull-left" href="@Url.Action("MyCart", "Cart")" style="font-size:15px"><i class="glyphicon glyphicon-arrow-left"></i> Back</a>
+            </div>
+        </div>
+        <div class="col-xs-6">
+            <div class="next">
+                <button type="submit" class="btn btn-primary pull-right" style="font-size:15px"><i class="glyphicon glyphicon-arrow-right"></i> Payment</button>
+            </div>
+        </div>
+    </div>
+}
+
+
+
+
+

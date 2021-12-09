@@ -1,0 +1,100 @@
+﻿@model IEnumerable<CafeArts.Models.Order>
+
+@{
+    ViewBag.Title = "Orders";
+    Layout = "~/Views/Shared/Admin_LayoutPage.cshtml";
+}
+
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Orders</h1>
+</div>
+
+<table class="table table-bordered table-hover" width="100%">
+
+
+
+    @if (!Model.Any())
+    {
+        <tbody>
+            <tr>
+                <td>There are no orders available</td>
+            </tr>
+        </tbody>
+    }
+
+    else
+    {
+        <thead>
+            <tr>
+                <th>Transaction ID</th>
+                <th>RP Unique ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Contact</th>
+                <th>Address</th>
+                <th>Amount</th>
+                <th>Date</th>
+                <th>Type</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+
+        foreach (var item in Model)
+        {
+            <tbody>
+                <tr>
+                    <td>
+                        @item.TransactionID
+                    </td>
+                    <td>
+                        @item.RPUniquePaymentID
+                    </td>
+                    <td>
+                        @item.CustomerName
+                    </td>
+                    <td>
+                        @item.CustomerEmail
+                    </td>
+                    <td>
+                        @item.CustomerContact
+                    </td>
+                    <td>
+                        @item.CustomerAddress
+                    </td>
+                    <td>
+                        @item.TotalAmount
+                    </td>
+                    <td>
+                        @item.CreatedDate
+                    </td>
+                    <td>
+                        @item.OrderType
+                    </td>
+                    <td>
+                        @{
+                            if (item.OrderStatus == "Ordered")
+                            {
+                                @Html.ActionLink("Confirm", "ConfirmOrder", "Admin", new { id = item.OrderID }, new { @class = "btn btn-primary" })
+
+                            }
+                    else
+                    {
+                        <p>Confirmed</p>
+                    }
+                        }
+
+                        @*<button type="button" class="btn btn-primary" value="UpdateCategory" onclick="location.href = '@Url.Action("UpdateCategory(item.CategoryID)","Admin")'">Edit</button>*@
+                    </td>
+
+
+                </tr>
+            </tbody>
+
+
+
+
+        }
+    }
+</table>
+
+

@@ -1,0 +1,140 @@
+﻿@using CafeArts.Models
+@model IEnumerable<CafeArts.Models.ProductModels>
+@{
+    ViewBag.Title = "Products";
+    Layout = "~/Views/Shared/Admin_LayoutPage.cshtml";
+}
+
+
+
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">List of products</h1>
+</div>
+
+@Html.ActionLink("Add Products", "AddProduct", "Admin", new { @class = "btn btn-primary" })
+
+<br />
+<br />
+
+<table class="table table-bordered table-hover" width="100%">
+
+
+
+    @if (!Model.Any())
+    {
+        <tbody>
+            <tr>
+                <td>There are no @ViewBag.Title added</td>
+            </tr>
+        </tbody>
+    }
+
+    else
+    {
+        <thead>
+            <tr>
+                <th>
+                    ID
+                </th>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Is Active?
+                </th>
+                <th>
+                    Is Featured?
+                </th>
+                <th>
+                    Short Description
+                </th>
+                <th>
+                    Description
+                </th>
+                <th>
+                    Image
+                </th>
+
+                <th>
+                    Price
+                </th>
+                <th>
+                    Quantity
+                </th>
+                <th>
+                    Ribbon
+                </th>
+                <th>
+                    Created date
+                </th>
+                <th>
+                    Modified date
+                </th>
+
+
+            </tr>
+        </thead>
+
+        foreach (var item in Model)
+        {
+            <tbody>
+                <tr>
+                    <td>
+                        @item.Id
+                    </td>
+                    <td>
+                        @item.ProductName
+                    </td>
+                    <td>
+                        @item.IsActive
+                    </td>
+                    <td>
+                        @item.IsFeatured
+                    </td>
+                    <td>
+                        @item.ProductShortDescription
+                    </td>
+                    <td>
+                        @item.ProductDescription
+                    </td>
+                    <td>
+                        <img src="@ByteArrayToImageConverter.Converter(item.ProductImage1)" style="height:100px; width:100px" />
+                    </td>
+
+                    <td>
+                        @item.ProductPrice
+                    </td>
+                    <td>
+                        @item.ProductQuantity
+                    </td>
+                    <td>
+                        @item.RibbonStatus
+                    </td>
+                    <td>
+                        @item.CreatedDate
+                    </td>
+                    <td>
+                        @item.ModifiedDate
+                    </td>
+
+
+                    <td>
+
+
+                        @Html.ActionLink("Edit", "ModifyProduct", "Admin", new { id = item.Id }, new { @class = "btn btn-primary" })
+
+
+                        @*<button type="button" class="btn btn-primary" value="UpdateCategory" onclick="location.href = '@Url.Action("UpdateCategory(item.CategoryID)","Admin")'">Edit</button>*@
+                    </td>
+
+
+                </tr>
+            </tbody>
+
+
+        }
+    }
+
+
+
+</table>

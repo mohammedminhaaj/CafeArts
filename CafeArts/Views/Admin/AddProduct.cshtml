@@ -1,0 +1,77 @@
+﻿@model CafeArts.ViewModels.ProductCategories
+
+@{
+    ViewBag.Title = "AddProduct";
+    Layout = "~/Views/Shared/Admin_LayoutPage.cshtml";
+}
+
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Add products</h1>
+</div>
+
+@using (Html.BeginForm("CreateProduct", "Admin", FormMethod.Post, new { enctype = "multipart/form-data"}))
+{
+    @Html.ValidationSummary(false)
+<div class="form-group" style="width: 30%">
+
+
+    @Html.LabelFor(m => m.Products.ProductName)
+    @Html.TextBoxFor(m => m.Products.ProductName, new { @class = "form-control" })<br />
+    @Html.ValidationMessageFor(m => m.Products.ProductName)
+
+    @Html.LabelFor(m => m.Products.CategoryID)
+    @Html.DropDownListFor(m => m.Products.CategoryID, new SelectList(Model.Categories, "CategoryID", "CategoryName"), "Select product category", new { @class = "form-control" })<br />
+    @Html.ValidationMessageFor(m => m.Products.CategoryID)
+
+    @Html.CheckBoxFor(m => m.Products.IsActive)
+    @Html.LabelFor(m => m.Products.IsActive) <br />
+    @Html.ValidationMessageFor(m => m.Products.IsActive)
+
+    @Html.CheckBoxFor(m => m.Products.IsFeatured)
+    @Html.LabelFor(m => m.Products.IsFeatured)<br /><br />
+    @Html.ValidationMessageFor(m => m.Products.IsFeatured)
+
+    @Html.LabelFor(m => m.Products.ProductShortDescription)
+    @Html.TextAreaFor(m => m.Products.ProductShortDescription, new { @class = "form-control" })<br />
+    @Html.ValidationMessageFor(m => m.Products.ProductShortDescription)
+
+    @Html.LabelFor(m => m.Products.ProductDescription)
+    @Html.TextAreaFor(m => m.Products.ProductDescription, new { @class = "form-control" })<br />
+    @Html.ValidationMessageFor(m => m.Products.ProductDescription)
+
+    @Html.LabelFor(m => m.Products.ProductImage1)
+    <input type="file" name="Image1" class=" btn btn-primary" /><br /><br />
+    @Html.ValidationMessageFor(m => m.Products.ProductImage1)
+
+    @Html.LabelFor(m => m.Products.ProductImage2)
+    <input type="file" name="Image2" class=" btn btn-primary" /><br /><br />
+
+    @Html.LabelFor(m => m.Products.ProductImage3)
+    <input type="file" name="Image3" class=" btn btn-primary" /><br /><br />
+
+    @Html.LabelFor(m => m.Products.ProductImage4)
+    <input type="file" name="Image4" class=" btn btn-primary" /><br /><br />
+
+    @Html.LabelFor(m => m.Products.ProductPrice)
+    @Html.TextBoxFor(m => m.Products.ProductPrice, new { @class = "form-control" })<br />
+    @Html.ValidationMessageFor(m => m.Products.ProductPrice)
+
+    @Html.LabelFor(m => m.Products.ProductQuantity)
+    @Html.TextBoxFor(m => m.Products.ProductQuantity, new { @class = "form-control" })<br />
+    @Html.ValidationMessageFor(m => m.Products.ProductQuantity)
+
+    @Html.LabelFor(m => m.Products.RibbonStatus)
+    @Html.TextBoxFor(m => m.Products.RibbonStatus, new { @class = "form-control" })<br />
+    @Html.ValidationMessageFor(m => m.Products.RibbonStatus)
+
+    @Html.AntiForgeryToken()
+
+    @*@Html.HiddenFor(m => m.Products.Id)*@
+
+
+    <button type="submit" class="btn btn-primary">Add</button>
+
+
+</div>    
+}
+

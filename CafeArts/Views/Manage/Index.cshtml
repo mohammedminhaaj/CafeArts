@@ -1,0 +1,217 @@
+﻿@model CafeArts.Models.IndexViewModel
+@using CafeArts.Models
+@using Microsoft.AspNet.Identity
+@{
+    ViewBag.Title = "Hello " + Model.UserDetails.FirstName;
+}
+
+<style>
+    dt {
+        float: left;
+        clear: left;
+        width: 110px;
+        font-weight: bold;
+        color: green;
+    }
+
+
+
+    dd {
+        margin: 0 0 0 80px;
+        padding: 0 0 0.5em 0;
+    }
+</style>
+
+<h2>@ViewBag.Title <small>&#128075</small></h2>
+
+<p class="text-success">@ViewBag.StatusMessage</p>
+<div>
+    @Html.ActionLink("Edit", "EditProfile", "Manage", new { id = Model.UserDetails.Id }, new { @class = "pull-right glyphicon glyphicon-edit" })
+    <h4>Personal Details</h4>
+
+    <hr />
+
+    <dl>
+
+
+
+        <dt style="color: #165A72">First name:</dt>
+        <dd>@Model.UserDetails.FirstName</dd>
+        <dt style="color: #165A72">Last name:</dt>
+        <dd>@Model.UserDetails.LastName</dd>
+        <dt style="color: #165A72">Email:</dt>
+        <dd>@Model.UserDetails.Email</dd>
+        <dt style="color: #165A72">Password:</dt>
+        <dd>
+            [
+            @if (Model.HasPassword)
+            {
+                @Html.ActionLink("Change your password", "ChangePassword")
+            }
+            else
+            {
+                @Html.ActionLink("Create", "SetPassword")
+            }
+            ]
+        </dd>
+        @*<dt>External Logins:</dt>
+            <dd>
+                @Model.Logins.Count [
+                @Html.ActionLink("Manage", "ManageLogins") ]
+            </dd>*@
+
+        @*
+            Phone Numbers can used as a second factor of verification in a two-factor authentication system.
+
+             See <a href="https://go.microsoft.com/fwlink/?LinkId=403804">this article</a>
+                for details on setting up this ASP.NET application to support two-factor authentication using SMS.
+
+             Uncomment the following block after you have set up two-factor authentication
+        *@
+        @*
+            <dt>Phone Number:</dt>
+            <dd>
+                @(Model.PhoneNumber ?? "None")
+                @if (Model.PhoneNumber != null)
+                {
+                    <br />
+                    <text>[&nbsp;&nbsp;@Html.ActionLink("Change", "AddPhoneNumber")&nbsp;&nbsp;]</text>
+                    using (Html.BeginForm("RemovePhoneNumber", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <text>[<input type="submit" value="Remove" class="btn-link" />]</text>
+                    }
+                }
+                else
+                {
+                    <text>[&nbsp;&nbsp;@Html.ActionLink("Add", "AddPhoneNumber")
+                }
+            </dd>
+        *@
+        <!--<dt>Two-Factor Authentication:</dt>
+        <dd>
+            <p>
+                There are no two-factor authentication providers configured. See <a href="https://go.microsoft.com/fwlink/?LinkId=403804">this article</a>
+                for details on setting up this ASP.NET application to support two-factor authentication.
+            </p>-->
+        @*@if (Model.TwoFactor)
+            {
+                using (Html.BeginForm("DisableTwoFactorAuthentication", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <text>Enabled
+                    <input type="submit" value="Disable" class="btn btn-link" />
+                    </text>
+                }
+            }
+            else
+            {
+                using (Html.BeginForm("EnableTwoFactorAuthentication", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <text>Disabled
+                    <input type="submit" value="Enable" class="btn btn-link" />
+                    </text>
+                }
+            }*@
+        <!--</dd>-->
+    </dl>
+
+    <br />
+    <h4>Orders</h4>
+    <hr />
+    @{
+        if (!Model.Orders.Any())
+        {
+            <h5>No orders placed yet.</h5>
+        }
+        else
+        {
+            <table class="table table-hover table-condensed" id="cart" style="font-size:15px">
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Order Date</th>
+                        <th>Payment type</th>
+                        <th>Status</th>
+                        <th>Amount</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var order in Model.Orders)
+                    {
+                        <tr>
+                            <td>
+                                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#show-order-details-@order.OrderID">
+                                    #@order.OrderID
+                                </button>
+                                <div class="modal fade" id="show-order-details-@order.OrderID" tabindex="-1" role="dialog" aria-labelledby="order-details-title" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="order-details-title">Order details</h5>
+                                            </div>
+                                            <div class="modal-body">
+                                                <dl class="dl-horizontal">
+                                                    <dt style="color: #165A72">Order:</dt>
+                                                    <dd>#@order.OrderID</dd>
+                                                    <dt style="color: #165A72">Shipping address:</dt>
+                                                    <dd>@order.CustomerAddress</dd>
+
+                                                    <dt style="color: #165A72">Ordered products:</dt>
+                                                    <dd>
+                                                        <ul>
+
+                                                            @foreach (var cartitems in Model.CartItems)
+                                                            {
+                                                                if (cartitems.OrderID == order.OrderID)
+                                                                {
+                                                                    <li>
+                                                                        <a href="@Url.Action("ProductDetails","Product", new { id = cartitems.Product.Id})" style="text-decoration:none">
+                                                                            @cartitems.Product.ProductName
+                                                                        </a>(<small>x</small>@cartitems.Quantity) - @cartitems.Product.ProductPrice.ToString("C0")/each
+                                                                    </li>
+                                                                }
+                                                            }
+
+                                                        </ul>
+
+                                                    </dd>
+                                                    <dt style="color: #165A72">Total amount:</dt>
+                                                    <dd>@order.TotalAmount.ToString("C0")</dd>
+                                                    <dt style="color: #165A72">Shipping type:</dt>
+                                                    <dd>Free</dd>
+                                                    <dt style="color: #165A72">Status:</dt>
+                                                    <dd>@order.OrderStatus</dd>
+                                                </dl>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                @order.CreatedDate
+                            </td>
+                            <td>
+                                @order.OrderType
+                            </td>
+                            <td>
+                                @order.OrderStatus
+                            </td>
+                            <td>
+                                @order.TotalAmount.ToString("C0")
+                            </td>
+                            <td>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    }
+
+</div>

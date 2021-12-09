@@ -1,0 +1,58 @@
+﻿@model CafeArts.Models.Order
+@{
+    ViewBag.Title = "Payment page";
+}
+<button id="rzp-button1" hidden>Pay</button>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+var options = {
+    "key": "@Html.DisplayFor(model => model.RazorPayKey)",
+    "amount": "@Html.DisplayFor(model => model.TotalAmount)",
+    "currency": "INR",
+    "name": "Cafe Arts",
+    "image": "https://image.shutterstock.com/z/stock-vector-browser-window-with-www-blue-flat-icon-on-white-background-476044510.jpg",
+    "order_id": "@Html.DisplayFor(model => model.TransactionID)",
+    "handler": function (response){
+
+        document.getElementById('rzp_paymentid').value = response.razorpay_payment_id;
+        document.getElementById('rzp_orderid').value = response.razorpay_order_id;
+
+        // // Let's submit the form automatically
+        document.getElementById('rzp-paymentresponse').click();
+    },
+    "prefill": {
+        "name": "@Html.DisplayFor(model => model.CustomerName)",
+        "email": "@Html.DisplayFor(model => model.CustomerEmail)",
+        "contact": "@Html.DisplayFor(model => model.CustomerContact)"
+    },
+    "notes": {
+        "address": "@Html.DisplayFor(model => model.CustomerAddress)"
+    },
+    "theme": {
+        "color": "#165A72"
+    }
+};
+var rzp1 = new Razorpay(options);
+
+window.onload = function(){
+    document.getElementById('rzp-button1').click();
+};
+
+document.getElementById('rzp-button1').onclick = function(e){
+    rzp1.open();
+    e.preventDefault();
+}
+</script>
+
+<!-- This form is hidden, and submit when payment successfully made -->
+@using (Html.BeginForm("PaymentConfirmation", "Cart"))
+{
+    @Html.AntiForgeryToken()
+
+    @Html.Hidden("rzp_paymentid")
+    @Html.Hidden("rzp_orderid")
+    <button type="submit" id="rzp-paymentresponse" class="btn btn-primary" style="display:none"></button>
+    <h2>Please wait while we process your payment through RazorPay</h2>
+    <h5>You will be redirected automatically once the payment is successful</h5><br />
+    <a href="@Url.Action("PaymentMethod","Cart")" style="text-decoration:none"><i class="glyphicon glyphicon-arrow-left"></i> Go back</a>
+}
