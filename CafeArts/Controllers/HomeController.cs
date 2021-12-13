@@ -33,7 +33,12 @@ namespace CafeArts.Controllers
 
             else
             {
-                ViewBag.Products = _context.Products.Include(p => p.Category).ToList();
+                var random = new Random();
+                ViewBag.Products = _context.Products.Include(p => p.Category).Where(m => m.IsFeatured);
+                var RandomReviews = _context.Review.Include(m => m.prod).Include(m => m.ApplicationUsers).Where(m => m.Rating == "Like" && !(m.ReviewData == null));
+                ViewBag.FirstReview = RandomReviews.ToList().ElementAt(random.Next(RandomReviews.Count()));
+                ViewBag.SecondReview = RandomReviews.ToList().ElementAt(random.Next(RandomReviews.Count()));
+                ViewBag.ThirdReview = RandomReviews.ToList().ElementAt(random.Next(RandomReviews.Count()));
                 return View();
             }
             

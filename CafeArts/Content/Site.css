@@ -306,8 +306,7 @@ textarea {
     border-radius: 20px;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
     overflow: hidden;
-    max-width: 100%;
-    /*max-height: 500px;*/
+    display:grid;
     margin: 30px;
 }
 
@@ -322,11 +321,7 @@ textarea {
         margin: 0;
 }
 
-.testimonial-body .fa-quote-right {
-        color: #eee;
-        font-size: 40px;
-        float: right;
-}
+
 
 .testimonial-footer {
     background-color: #165A72;
@@ -337,7 +332,6 @@ textarea {
 
 .testimonial-footer img {
         border-radius: 50%;
-        border: 5px solid #fff;
         height: 120px;
         width: 120px;
         margin-top: -100px;

@@ -143,18 +143,20 @@
         <div class="col-md-4">
             <div class="testimonial">
                 <div class="testimonial-body">
-                    <em>
-                        <p>
+                    
+                        <p><em>
                             "
-                            A review in 50 lines is something that everyone need. Absolutely best service that anyone could offer. Please find a way home from here! yours faithfully, Lucky"
+                                @ViewBag.FirstReview.ReviewData
+                            "</em>
+                            
                         </p>
-                    </em>
-                    <i class="fas fa-quote-right"></i>
+                   
+                    
                 </div>
                 <div class="testimonial-footer">
-                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="user" />
-                    <h3>Alex Snow</h3>
-                    <h4>4 stars</h4>
+                    <img src="@Url.Content("~/Content/Img/user-profile.png")" alt="user" style="object-fit:cover" />
+                    <h3>@ViewBag.FirstReview.ApplicationUsers.FirstName @ViewBag.FirstReview.ApplicationUsers.LastName</h3>
+                    <h4>for <a href="@Url.Action("ProductDetails","Product", new { id = ViewBag.FirstReview.prod.Id})"style="text-decoration:none">@ViewBag.FirstReview.prod.ProductName</a></h4>
                 </div>
             </div>
         </div>
@@ -162,18 +164,18 @@
         <div class="col-md-4">
             <div class="testimonial">
                 <div class="testimonial-body">
-                    <em>
-                        <p>
-                            "
-                            A review in 50 lines is something that everyone need. Absolutely best service that anyone could offer. Please find a way home from here! yours faithfully, Lucky"
+                    
+                        <p><em>"
+                            @ViewBag.SecondReview.ReviewData
+                        "</em>
                         </p>
-                    </em>
-                    <i class="fas fa-quote-right"></i>
+                    
+                    
                 </div>
                 <div class="testimonial-footer">
-                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="user" />
-                    <h3>Alex Snow</h3>
-                    <h4>4 stars</h4>
+                    <img src="@Url.Content("~/Content/Img/user-profile.png")" alt="user" style="object-fit:cover" />
+                    <h3>@ViewBag.SecondReview.ApplicationUsers.FirstName @ViewBag.SecondReview.ApplicationUsers.LastName</h3>
+                    <h4>for <a href="@Url.Action("ProductDetails","Product", new { id = ViewBag.SecondReview.prod.Id})"style="text-decoration:none">@ViewBag.SecondReview.prod.ProductName</a></h4>
                 </div>
             </div>
         </div>
@@ -181,18 +183,18 @@
         <div class="col-md-4">
             <div class="testimonial">
                 <div class="testimonial-body">
-                    <em>
-                        <p>
-                            "
-                            A review in 50 lines is something that everyone need. Absolutely best service that anyone could offer. Please find a way home from here! yours faithfully, Lucky"
+                    
+                        <p><em>"
+                            @ViewBag.ThirdReview.ReviewData
+                        "</em>
                         </p>
-                    </em>
-                    <i class="fas fa-quote-right"></i>
+                    
+                    
                 </div>
                 <div class="testimonial-footer">
-                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="user" />
-                    <h3>Alex Snow</h3>
-                    <h4>4 stars</h4>
+                    <img src="@Url.Content("~/Content/Img/user-profile.png")" alt="user" style="object-fit:cover" />
+                    <h3>@ViewBag.ThirdReview.ApplicationUsers.FirstName @ViewBag.ThirdReview.ApplicationUsers.LastName</h3>
+                    <h4>for <a href="@Url.Action("ProductDetails","Product", new { id = ViewBag.ThirdReview.prod.Id})" style="text-decoration:none">@ViewBag.ThirdReview.prod.ProductName</a></h4>
                 </div>
             </div>
         </div>
