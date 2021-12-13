@@ -36,10 +36,10 @@ namespace CafeArts.Models
 
         [Required(ErrorMessage = "State field cannot be empty!")]
         [Display(Name = "State")]
-        public virtual int StateID { get; set; }
+        public int StateID { get; set; }
 
         [ForeignKey("StateID")]
-        public virtual States statemodel { get; set; }
+        public States statemodel { get; set; }
 
         [Required(ErrorMessage = "Zip code field cannot be empty!")]
         [MaxLength(6, ErrorMessage = "Please enter a valid zip code")]

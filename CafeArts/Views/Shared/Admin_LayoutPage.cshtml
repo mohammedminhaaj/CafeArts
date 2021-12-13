@@ -12,11 +12,14 @@
     <!-- Custom styles for this template-->
     <link href="~/Content/Admin_Layout/css/sb-admin-2.min.css" rel="stylesheet">
 
+    @Scripts.Render("~/bundles/jquery")
+    @RenderSection("scripts", required: false)
+
 </head>
 
 <body id="page-top">
 
-        <!-- Page Wrapper -->
+    <!-- Page Wrapper -->
     <div id="wrapper">
 
         <!-- Sidebar -->
@@ -75,7 +78,14 @@
             <li class="nav-item">
                 <a class="nav-link" href="@Url.Action("ConfirmedOrders","Admin")">
                     <i class="fas fa-fw fa-folder"></i>
-                    <span>Confirmed</span>
+                    <span>Confirmed orders</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("PostConfirmationOrders","Admin")">
+                    <i class="fas fa-fw fa-folder"></i>
+                    <span>Post-Confirmation orders</span>
                 </a>
             </li>
 
@@ -339,24 +349,28 @@
             </div>
         </div>
     </div>
+
 </body>
 
 
-    <!-- Bootstrap core JavaScript-->
-    <script src="~/Content/Admin_Layout/vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Core plugin JavaScript-->
-    <script src="~/Content/Admin_Layout/vendor/jquery-easing/jquery.easing.min.js"></script>
+<!-- Bootstrap core JavaScript-->
+<script src="~/Content/Admin_Layout/vendor/jquery/jquery.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Custom scripts for all pages-->
-    <script src="~/Content/Admin_Layout/js/sb-admin-2.min.js"></script>
+<!-- Core plugin JavaScript-->
+<script src="~/Content/Admin_Layout/vendor/jquery-easing/jquery.easing.min.js"></script>
 
-    <!-- Page level plugins -->
-    <script src="~/Content/Admin_Layout/vendor/chart.js/Chart.min.js"></script>
+<!-- Custom scripts for all pages-->
+<script src="~/Content/Admin_Layout/js/sb-admin-2.min.js"></script>
 
-    <!-- Page level custom scripts -->
-    <script src="~/Content/Admin_Layout/js/demo/chart-area-demo.js"></script>
-    <script src="~/Content/Admin_Layout/js/demo/chart-pie-demo.js"></script>
+<!-- Page level plugins -->
+<script src="~/Content/Admin_Layout/vendor/chart.js/Chart.min.js"></script>
+
+<!-- Page level custom scripts -->
+<script src="~/Content/Admin_Layout/js/demo/chart-area-demo.js"></script>
+<script src="~/Content/Admin_Layout/js/demo/chart-pie-demo.js"></script>
+
+
 
 </html>

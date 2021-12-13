@@ -267,7 +267,8 @@ namespace CafeArts.Controllers
                 CustomerAddress = ShippingDetailsModel.Address,
                 CreatedDate = DateTime.Now,
                 RazorPayKey = "Not available",
-                OrderStatus = "Ordered"
+                OrderStatus = "Ordered",
+                WayBill = "NA"
 
             };
 
@@ -335,11 +336,5 @@ namespace CafeArts.Controllers
             return subtotal??0;
         }
 
-        //[NonAction]
-        //public string GetDeliveryStatus (string CurrentStatus)
-        //{
-        //    if (CurrentStatus == )
-        //    return CurrentStatus;
-        //}
     }
 }

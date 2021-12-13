@@ -2,6 +2,7 @@
 using CafeArts.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -355,6 +356,53 @@ namespace CafeArts.Controllers
         public ActionResult ConfirmedOrders()
         {
             return View("Orders", _context.orders.Where(m => m.OrderStatus == "Confirmed"));
+        }
+
+        public ActionResult OrderDetails(int id)
+        {
+            var CartModel = _context.Carts.Include(m => m.Product).Where(m => m.OrderID == id && !m.IsActive);
+            ViewBag.SingleOrderDetails = _context.orders.Single(m => m.OrderID == id);
+            return View(CartModel);
+        }
+
+        public ActionResult CheckAsDelivered(int id)
+        {
+            var OrderInDB = _context.orders.Single(m => m.OrderID == id);
+            OrderInDB.OrderStatus = "Delivered";
+            _context.SaveChanges();
+            return RedirectToAction("PostConfirmationOrders", "Admin");
+        }
+
+        public ActionResult PostConfirmationOrders()
+        {
+            return View("Orders", _context.orders.Where(m => m.OrderStatus == "Delivered" || m.OrderStatus == "Canceled" || m.OrderStatus == "In transit"));
+        }
+
+        public ActionResult CancelOrder(int id)
+        {
+            var OrderInDB = _context.orders.Single(m => m.OrderID == id);
+            OrderInDB.OrderStatus = "Canceled";
+            _context.SaveChanges();
+            return RedirectToAction("PostConfirmationOrders", "Admin");
+        }
+
+        public ActionResult AddWayBill(int id, string waybill)
+        {
+            var OrderInDB = _context.orders.Single(m => m.OrderID == id);
+            if (waybill == "")
+            {
+                TempData["ErrorForWayBill"] = "Cannot submit empty waybill!";
+                return RedirectToAction("OrderDetails","Admin", new { id = OrderInDB.OrderID});
+
+            }
+            else
+            {
+                OrderInDB.WayBill = waybill;
+                OrderInDB.OrderStatus = "In transit";
+                _context.SaveChanges();
+                return RedirectToAction("OrderDetails", "Admin", new { id = OrderInDB.OrderID });
+            }
+
         }
     }
 }

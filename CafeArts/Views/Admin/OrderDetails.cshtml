@@ -1,0 +1,137 @@
+﻿@model IEnumerable<CafeArts.Models.Cart>
+@using CafeArts.Models
+@{
+    ViewBag.Title = "Order Details";
+    Layout = "~/Views/Shared/Admin_LayoutPage.cshtml";
+}
+
+
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Single order details</h1>
+</div>
+
+<dl class="dl-horizontal">
+    <dt>Order ID:</dt>
+    <dd>@ViewBag.SingleOrderDetails.OrderID</dd>
+    <dt>RazorPay OrderID:</dt>
+    <dd>@ViewBag.SingleOrderDetails.TransactionID</dd>
+    <dt>RazorPayID:</dt>
+    <dd>@ViewBag.SingleOrderDetails.RPUniquePaymentID</dd>
+    <dt>Customer name:</dt>
+    <dd>@ViewBag.SingleOrderDetails.CustomerName</dd>
+    <dt>Customer email:</dt>
+    <dd>@ViewBag.SingleOrderDetails.CustomerEmail</dd>
+    <dt>Customer address:</dt>
+    <dd>@ViewBag.SingleOrderDetails.CustomerAddress</dd>
+    <dt>Customer phone:</dt>
+    <dd>@ViewBag.SingleOrderDetails.CustomerContact</dd>
+    <dt>Order amount:</dt>
+    <dd>@ViewBag.SingleOrderDetails.TotalAmount.ToString("C")</dd>
+    <dt>Created on:</dt>
+    <dd>@ViewBag.SingleOrderDetails.CreatedDate</dd>
+    <dt>Order type:</dt>
+    <dd>@ViewBag.SingleOrderDetails.OrderType</dd>
+    <dt>Order status:</dt>
+    <dd>@ViewBag.SingleOrderDetails.OrderStatus</dd>
+    <dt>Waybill number:</dt>
+    <dd>
+        @{
+            if (ViewBag.SingleOrderDetails.WayBill == "NA" && !(ViewBag.SingleOrderDetails.OrderStatus == "Delivered" || ViewBag.SingleOrderDetails.OrderStatus == "Canceled" || ViewBag.SingleOrderDetails.OrderStatus == "Ordered"))
+            {
+                <input type="text" placeholder="Enter here" class="form-group form-control way-bill" style="width:25%; min-width:200px">
+                if (TempData.ContainsKey("ErrorForWayBill"))
+                {
+                    <p class="text-danger">@TempData["ErrorForWayBill"]</p>
+                }
+                <button class="btn btn-secondary js-waybill">Submit</button>
+
+            }
+            else
+            {
+                @ViewBag.SingleOrderDetails.WayBill
+            }
+
+        }
+    </dd>
+</dl>
+<br />
+@if (!(ViewBag.SingleOrderDetails.OrderStatus == "Delivered" || ViewBag.SingleOrderDetails.OrderStatus == "Canceled"))
+{
+    <a href="@Url.Action("CheckAsDelivered","Admin",new { id = ViewBag.SingleOrderDetails.OrderID })" class="btn btn-primary">Check as delivered</a>
+    <br />
+    <br />
+}
+
+@if (!(ViewBag.SingleOrderDetails.OrderStatus == "Delivered" || ViewBag.SingleOrderDetails.OrderStatus == "Canceled"))
+{
+    <a href="@Url.Action("CancelOrder","Admin",new { id = ViewBag.SingleOrderDetails.OrderID })" class="btn btn-primary">Cancel order</a>
+    <br />
+    <br />
+}
+
+<hr />
+
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Products ordered</h1>
+</div>
+
+
+@if (!Model.Any())
+{
+    <h3>There are no products linked to this order</h3>
+
+
+}
+else
+{
+    <table class="table table-bordered table-hover" width="100%">
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Quantity</th>
+                <th>Cost</th>
+            </tr>
+        </thead>
+
+        @foreach (var item in Model)
+        {
+            <tbody>
+                <tr>
+                    <td>
+                        <a href="@Url.Action("ProductDetails","Product", new { id = item.ProductID})">
+                            <img src="@ByteArrayToImageConverter.Converter(item.Product.ProductImage1)" alt="Product image" style="height:150px; width:150px; border-radius: 10px;">
+                        </a>
+                    </td>
+                    <td>
+                        @item.Product.ProductName
+                    </td>
+                    <td>
+                        @item.Quantity
+                    </td>
+                    <td>
+                        @item.Product.ProductPrice
+                    </td>
+                </tr>
+            </tbody>
+        }
+
+    </table>
+
+}
+
+
+
+@section scripts
+{
+
+    <script>
+        $(document).ready(function () {
+            $('.js-waybill').on('click', function () {
+                var url = '@Url.Action("AddWayBill", "Admin")';
+                var value = $('.way-bill').val();
+                window.location.href = url + '?id=' + @ViewBag.SingleOrderDetails.OrderID+"&waybill=" + value;
+            });
+        });
+    </script>
+}

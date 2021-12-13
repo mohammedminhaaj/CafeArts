@@ -15,17 +15,18 @@
 
     @if (!Model.Any())
     {
-        <tbody>
+        
             <tr>
                 <td>There are no orders available</td>
             </tr>
-        </tbody>
+        
     }
 
     else
     {
         <thead>
             <tr>
+                <th>Order ID</th>
                 <th>Transaction ID</th>
                 <th>RP Unique ID</th>
                 <th>Name</th>
@@ -35,14 +36,21 @@
                 <th>Amount</th>
                 <th>Date</th>
                 <th>Type</th>
+                <th>WayBill</th>
                 <th>Status</th>
             </tr>
         </thead>
 
         foreach (var item in Model)
         {
+            
             <tbody>
+
                 <tr>
+
+                    <td>
+                        <a href="@Url.Action("OrderDetails","Admin", new { id = item.OrderID})">@item.OrderID</a>
+                    </td>
                     <td>
                         @item.TransactionID
                     </td>
@@ -71,25 +79,30 @@
                         @item.OrderType
                     </td>
                     <td>
+                        @item.WayBill
+                    </td>
+                    <td>
                         @{
                             if (item.OrderStatus == "Ordered")
                             {
                                 @Html.ActionLink("Confirm", "ConfirmOrder", "Admin", new { id = item.OrderID }, new { @class = "btn btn-primary" })
 
                             }
-                    else
-                    {
-                        <p>Confirmed</p>
-                    }
+                            else
+                            {
+                                @item.OrderStatus
+                            }
                         }
 
                         @*<button type="button" class="btn btn-primary" value="UpdateCategory" onclick="location.href = '@Url.Action("UpdateCategory(item.CategoryID)","Admin")'">Edit</button>*@
                     </td>
 
 
-                </tr>
-            </tbody>
 
+                </tr>
+
+            </tbody>
+            
 
 
 

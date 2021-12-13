@@ -335,6 +335,10 @@
     <Compile Include="Migrations\202112061247056_ModificationsToCartAndOrder.Designer.cs">
       <DependentUpon>202112061247056_ModificationsToCartAndOrder.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202112131756573_AddingWayBillInOrders.cs" />
+    <Compile Include="Migrations\202112131756573_AddingWayBillInOrders.Designer.cs">
+      <DependentUpon>202112131756573_AddingWayBillInOrders.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ByteArrayToImageConverter.cs" />
@@ -2288,6 +2292,7 @@
     <Content Include="Views\Cart\OrderPlaced.cshtml" />
     <Content Include="Views\Cart\PaymentFailed.cshtml" />
     <Content Include="Views\Admin\Orders.cshtml" />
+    <Content Include="Views\Admin\OrderDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -2422,6 +2427,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202112061247056_ModificationsToCartAndOrder.resx">
       <DependentUpon>202112061247056_ModificationsToCartAndOrder.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202112131756573_AddingWayBillInOrders.resx">
+      <DependentUpon>202112131756573_AddingWayBillInOrders.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

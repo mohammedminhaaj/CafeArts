@@ -28,5 +28,7 @@ namespace CafeArts.Models
         public string OrderType { get; set; }
         public string OrderStatus { get; set; }
 
+        public string WayBill { get; set; }
+
     }
 }
