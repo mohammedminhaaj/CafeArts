@@ -1,0 +1,61 @@
+﻿@model CafeArts.Models.Customize
+
+@{
+    ViewBag.Title = "Customize";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Customize your order</h2>
+<h4>Pick any four beautiful colors and let us do the rest.</h4>
+<h6>We will customize your product based on the colors you choose.</h6><br />
+
+
+
+@using (Html.BeginForm("SubmitCustomize", "Product", FormMethod.Post))
+{
+<div class="form-group-sm">
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    @Html.LabelFor(m => m.CategoryId)
+    @Html.DropDownListFor(m => m.CategoryId, new SelectList(Model.CategoriesForCustom, "CategoryID", "CategoryName"), "Select a category", new { @class = "form-control" })
+    @Html.ValidationMessageFor(m => m.CategoryId)<br />
+
+    @Html.LabelFor(m => m.Color1)
+    <input type="color" id="Color1" name="Color1" value="#ffffff"/><br /><br />
+    @Html.ValidationMessageFor(m => m.Color1)
+
+    @Html.LabelFor(m => m.Color2)
+    <input type="color" id="Color2" name="Color2" value="#ffffff"/><br /><br />    
+
+    @Html.LabelFor(m => m.Color3)
+    <input type="color" id="Color3" name="Color3" value="#ffffff"/><br /><br />   
+
+    @Html.LabelFor(m => m.Color4)
+    <input type="color" id="Color4" name="Color4" value="#ffffff"/><br /><br />    
+
+    @Html.LabelFor(m => m.FullName)
+    @Html.TextBoxFor(m => m.FullName, new { @class = "form-control" })
+    @Html.ValidationMessageFor(m => m.FullName)<br />
+
+    @Html.LabelFor(m => m.Email)
+    @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+    @Html.ValidationMessageFor(m => m.Email)<br />
+
+    @Html.LabelFor(m => m.ContactNumber)
+    @Html.TextBoxFor(m => m.ContactNumber, new { @class = "form-control" })
+    @Html.ValidationMessageFor(m => m.ContactNumber)<br />
+
+    @Html.LabelFor(m => m.CustomizeDescription)
+    @Html.TextAreaFor(m => m.CustomizeDescription, new { @class = "form-control" })
+    @Html.ValidationMessageFor(m => m.CustomizeDescription)<br />
+
+    @Html.AntiForgeryToken()
+
+    
+
+    <button type="submit" class="btn btn-default">Request</button>
+</div>
+}
+
+
+

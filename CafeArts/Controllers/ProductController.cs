@@ -121,6 +121,41 @@ namespace CafeArts.Controllers
             return RedirectToAction("ProductDetails", new { id = ReviewInDB.ProdID });
         }
 
+        public ActionResult CustomizeProduct()
+        {
+            var CustomModel = new Customize() { CategoriesForCustom = _context.Categories.ToList() };
+            return View(CustomModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult SubmitCustomize(Customize customizeModel)
+        {
+            
+
+            if (!ModelState.IsValid)
+            {
+                customizeModel.CategoriesForCustom = _context.Categories.ToList();
+                return View("CustomizeProduct",customizeModel);
+            }
+
+            else
+            {
+                customizeModel.CreatedDate = DateTime.Now;
+                _context.Customizing.Add(customizeModel);
+                _context.SaveChanges();                
+                return RedirectToAction("RequestSuccess","Product", new { value = customizeModel.ContactNumber});
+            }
+            
+        }
+
+        [PreventFromUrl]
+        public ActionResult RequestSuccess(string value)
+        {
+            ViewBag.CustomizePhoneNumber = value;
+            return View();
+        }
+
         public IEnumerator GetEnumerator()
         {
             throw new NotImplementedException();

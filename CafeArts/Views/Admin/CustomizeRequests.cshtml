@@ -1,0 +1,86 @@
+﻿@model IEnumerable<CafeArts.Models.Customize>
+
+@{
+    ViewBag.Title = "Customize Requests";
+    Layout = "~/Views/Shared/Admin_LayoutPage.cshtml";
+}
+
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Customization requests</h1>
+</div>
+
+<table class="table table-bordered table-hover" width="100%">
+
+
+
+    @if (!Model.Any())
+    {
+        <tbody>
+            <tr>
+                <td>There are no requests added</td>
+            </tr>
+        </tbody>
+    }
+
+    else
+    {
+        <thead>
+            <tr>
+                <th>Category</th>
+                <th>Created</th>
+                <th>Customer Name</th>
+                <th>Contact</th>
+                <th>Email</th>
+                <th>Notes</th>
+                <th>Color 1</th>
+                <th>Color 2</th>
+                <th>Color 3</th>
+                <th>Color 4</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+        foreach (var item in Model)
+        {
+            <tbody>
+                <tr>
+                    <td>
+                        @item.Categories.CategoryName
+                    </td>
+                    <td>
+                        @item.CreatedDate
+                    </td>
+                    <td>
+                        @item.FullName
+                    </td>
+                    <td>
+                        @item.ContactNumber
+                    </td>
+                    <td>
+                        @item.Email
+                    </td>
+                    <td>
+                        @item.CustomizeDescription
+                    </td>
+                    <td style="background-color: @item.Color1">
+                    </td>
+                    <td style="background-color:@item.Color2">
+                    </td>
+                    <td style="background-color:@item.Color3">
+                    </td>
+                    <td style="background-color:@item.Color4">
+                    </td>
+                    <td>
+                        @Html.ActionLink("Delete", "DeleteCustomize", "Admin", new { id = item.CustomizeID }, new { @class = "btn btn-primary" })
+                    </td>
+
+
+                </tr>
+            </tbody>
+
+
+
+
+        }
+    }
+</table>

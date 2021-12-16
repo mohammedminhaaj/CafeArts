@@ -337,18 +337,18 @@ textarea {
         margin-top: -100px;
 }
 
-    .testimonial-footer h3 {
-        font-family: "Raleway", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    .testimonial-footer h5 {
+        /*font-family: "Raleway", "Helvetica Neue", Helvetica, Arial, sans-serif;*/
         margin: 10px 0;
-        letter-spacing: 2px;
-        text-transform: uppercase;
+        /*letter-spacing: 2px;*/
+        /*text-transform: uppercase;*/
     }
 
-    .testimonial-footer h4 {
-        font-family: "Raleway", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    .testimonial-footer h6 {
+        /*font-family: "Raleway", "Helvetica Neue", Helvetica, Arial, sans-serif;*/
         color: #f5f5f5;
         margin: 0;
-        letter-spacing: 1px;
+        /*letter-spacing: 1px;*/
     }
 
 /*Categories*/
@@ -372,6 +372,9 @@ textarea {
     background: linear-gradient( rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6) ), url(https://images.unsplash.com/photo-1631764072001-bfbb5cc64873?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MzB8fGNvYXN0ZXJzfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60);
 }
 
+.category-image-3 {
+    background: linear-gradient( rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6) ), url(https://images.unsplash.com/photo-1596464716127-f2a82984de30?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80);
+}
 
 .category:hover {
     opacity: 0.7;

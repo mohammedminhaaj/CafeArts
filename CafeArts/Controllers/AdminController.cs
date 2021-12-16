@@ -404,5 +404,18 @@ namespace CafeArts.Controllers
             }
 
         }
+
+        public ActionResult CustomizeRequests()
+        {
+            var CustomizeModel = _context.Customizing.Include(m => m.Categories).ToList();
+            return View(CustomizeModel);
+        }
+
+        public ActionResult DeleteCustomize(int id)
+        {
+            _context.Customizing.Remove(_context.Customizing.Single(m => m.CustomizeID == id));
+            _context.SaveChanges();
+            return RedirectToAction("CustomizeRequests");
+        }
     }
 }

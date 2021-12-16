@@ -4,6 +4,7 @@
 }
 <br />
 <br />
+
 <div class="carousel fade-carousel slide" data-ride="carousel" data-interval="4000" id="bs-carousel">
     <!-- Overlay -->
     <div class="overlay"></div>
@@ -132,6 +133,16 @@
         </div>
     </div>
 
+    <div class="row">
+        <div class="col-md-12">
+            <a href="@Url.Action("CustomizeProduct","Product")">
+                <div class="category mid category-image-3">
+                    <h2>Customize</h2>
+                </div>
+            </a>
+        </div>
+    </div>
+
 </section>
 
 <!-- Testimonials -->
@@ -140,64 +151,82 @@
         @*<h2 style="text-transform:uppercase;">Reviews</h2>*@
     </div>
     <div class="row">
-        <div class="col-md-4">
-            <div class="testimonial">
-                <div class="testimonial-body">
-                    
-                        <p><em>
-                            "
+        @if (ViewBag.FirstReview != null)
+        {
+            <div class="col-md-4">
+                <div class="testimonial">
+                    <div class="testimonial-body">
+
+                        <p>
+                            <em>
+                                "
                                 @ViewBag.FirstReview.ReviewData
-                            "</em>
-                            
-                        </p>
-                   
-                    
-                </div>
-                <div class="testimonial-footer">
-                    <img src="@Url.Content("~/Content/Img/user-profile.png")" alt="user" style="object-fit:cover" />
-                    <h3>@ViewBag.FirstReview.ApplicationUsers.FirstName @ViewBag.FirstReview.ApplicationUsers.LastName</h3>
-                    <h4>for <a href="@Url.Action("ProductDetails","Product", new { id = ViewBag.FirstReview.prod.Id})"style="text-decoration:none">@ViewBag.FirstReview.prod.ProductName</a></h4>
-                </div>
-            </div>
-        </div>
+                                "
+                            </em>
 
-        <div class="col-md-4">
-            <div class="testimonial">
-                <div class="testimonial-body">
-                    
-                        <p><em>"
-                            @ViewBag.SecondReview.ReviewData
-                        "</em>
                         </p>
-                    
-                    
-                </div>
-                <div class="testimonial-footer">
-                    <img src="@Url.Content("~/Content/Img/user-profile.png")" alt="user" style="object-fit:cover" />
-                    <h3>@ViewBag.SecondReview.ApplicationUsers.FirstName @ViewBag.SecondReview.ApplicationUsers.LastName</h3>
-                    <h4>for <a href="@Url.Action("ProductDetails","Product", new { id = ViewBag.SecondReview.prod.Id})"style="text-decoration:none">@ViewBag.SecondReview.prod.ProductName</a></h4>
-                </div>
-            </div>
-        </div>
 
-        <div class="col-md-4">
-            <div class="testimonial">
-                <div class="testimonial-body">
-                    
-                        <p><em>"
-                            @ViewBag.ThirdReview.ReviewData
-                        "</em>
-                        </p>
-                    
-                    
-                </div>
-                <div class="testimonial-footer">
-                    <img src="@Url.Content("~/Content/Img/user-profile.png")" alt="user" style="object-fit:cover" />
-                    <h3>@ViewBag.ThirdReview.ApplicationUsers.FirstName @ViewBag.ThirdReview.ApplicationUsers.LastName</h3>
-                    <h4>for <a href="@Url.Action("ProductDetails","Product", new { id = ViewBag.ThirdReview.prod.Id})" style="text-decoration:none">@ViewBag.ThirdReview.prod.ProductName</a></h4>
+
+                    </div>
+                    <div class="testimonial-footer">
+                        <img src="@Url.Content("~/Content/Img/user-profile.png")" alt="user" style="object-fit:cover" />
+                        <h5>@ViewBag.FirstReview.ApplicationUsers.FirstName @ViewBag.FirstReview.ApplicationUsers.LastName</h5>
+                        <h6>for <a href="@Url.Action("ProductDetails","Product", new { id = ViewBag.FirstReview.prod.Id})" style="text-decoration:none; color:gray">@ViewBag.FirstReview.prod.ProductName</a></h6>
+                    </div>
                 </div>
             </div>
-        </div>
+        }
+
+        @if (ViewBag.SecondReview != null)
+        {
+            <div class="col-md-4">
+                <div class="testimonial">
+                    <div class="testimonial-body">
+
+                        <p>
+                            <em>
+                                "
+                                @ViewBag.SecondReview.ReviewData
+                                "
+                            </em>
+                        </p>
+
+
+                    </div>
+                    <div class="testimonial-footer">
+                        <img src="@Url.Content("~/Content/Img/user-profile.png")" alt="user" style="object-fit:cover" />
+                        <h5>@ViewBag.SecondReview.ApplicationUsers.FirstName @ViewBag.SecondReview.ApplicationUsers.LastName</h5>
+                        <h6>for <a href="@Url.Action("ProductDetails","Product", new { id = ViewBag.SecondReview.prod.Id})" style="text-decoration: none; color: gray">@ViewBag.SecondReview.prod.ProductName</a></h6>
+                    </div>
+                </div>
+            </div>
+        }
+
+        @if (ViewBag.ThirdReview != null)
+        {
+            <div class="col-md-4">
+                <div class="testimonial">
+                    <div class="testimonial-body">
+
+                        <p>
+                            <em>
+                                "
+                                @ViewBag.ThirdReview.ReviewData
+                                "
+                            </em>
+                        </p>
+
+
+                    </div>
+                    <div class="testimonial-footer">
+                        <img src="@Url.Content("~/Content/Img/user-profile.png")" alt="user" style="object-fit:cover" />
+                        <h5>@ViewBag.ThirdReview.ApplicationUsers.FirstName @ViewBag.ThirdReview.ApplicationUsers.LastName</h5>
+                        <h6>for <a href="@Url.Action("ProductDetails","Product", new { id = ViewBag.ThirdReview.prod.Id})" style="text-decoration: none; color: gray">@ViewBag.ThirdReview.prod.ProductName</a></h6>
+                    </div>
+                </div>
+            </div>
+        }
+
     </div>
 </section>
 <br />
