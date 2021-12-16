@@ -1,0 +1,70 @@
+﻿@model IEnumerable<CafeArts.Models.Feedback>
+@{
+    ViewBag.Title = "Queries";
+    Layout = "~/Views/Shared/Admin_LayoutPage.cshtml";
+}
+
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Queries</h1>
+</div>
+
+<table class="table table-bordered table-hover" width="100%">
+
+
+
+    @if (!Model.Any())
+    {
+        <tbody>
+            <tr>
+                <td>There are no queries</td>
+            </tr>
+        </tbody>
+    }
+
+    else
+    {
+        <thead>
+            <tr>
+                <th>Reason</th>
+                <th>Created</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Message</th>
+            </tr>
+        </thead>
+
+        foreach (var item in Model)
+        {
+            <tbody>
+                <tr>
+                    <td>
+                        @item.Reason
+                    </td>
+                    <td>
+                        @item.CreatedDate
+                    </td>
+                    <td>
+                        @item.FullName
+                    </td>
+                    <td>
+                        @item.Email
+                    </td>
+                    <td>
+                        @item.Contact
+                    </td>
+                    <td>
+                        @item.Message
+                    </td>
+
+
+                </tr>
+            </tbody>
+
+
+
+
+        }
+    }
+</table>
+

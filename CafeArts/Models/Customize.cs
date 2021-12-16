@@ -40,10 +40,14 @@ namespace CafeArts.Models
 
         [Display(Name = "Contact number")]
         [Required(ErrorMessage = "Enter a valid contact number")]
+        [Phone]
+        [StringLength(10, ErrorMessage = "Please enter valid phone number"), MinLength(10, ErrorMessage = "Invalid Phone number")]
+
         public string ContactNumber { get; set; }
 
         [Display(Name = "Email address")]
         [Required(ErrorMessage = "Enter a valid email address")]
+        [EmailAddress]
         public string Email { get; set; }
 
         [Display(Name = "Notes")]

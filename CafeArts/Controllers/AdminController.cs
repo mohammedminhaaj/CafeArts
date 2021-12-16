@@ -417,5 +417,11 @@ namespace CafeArts.Controllers
             _context.SaveChanges();
             return RedirectToAction("CustomizeRequests");
         }
+
+        public ActionResult Queries()
+        {
+            var QueryModel = _context.Feedbacks.ToList();
+            return View(QueryModel);
+        }
     }
 }

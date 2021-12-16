@@ -347,12 +347,21 @@
     <Compile Include="Migrations\202112161050426_TestForCustom.Designer.cs">
       <DependentUpon>202112161050426_TestForCustom.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202112161640011_AdditionOfFeedback.cs" />
+    <Compile Include="Migrations\202112161640011_AdditionOfFeedback.Designer.cs">
+      <DependentUpon>202112161640011_AdditionOfFeedback.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202112161651473_UpdatesToFeedback.cs" />
+    <Compile Include="Migrations\202112161651473_UpdatesToFeedback.Designer.cs">
+      <DependentUpon>202112161651473_UpdatesToFeedback.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ByteArrayToImageConverter.cs" />
     <Compile Include="Models\Cart.cs" />
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\Customize.cs" />
+    <Compile Include="Models\Feedback.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Order.cs" />
@@ -2306,6 +2315,7 @@
     <Content Include="Views\Product\CustomizeProduct.cshtml" />
     <Content Include="Views\Product\RequestSuccess.cshtml" />
     <Content Include="Views\Admin\CustomizeRequests.cshtml" />
+    <Content Include="Views\Admin\Queries.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -2449,6 +2459,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202112161050426_TestForCustom.resx">
       <DependentUpon>202112161050426_TestForCustom.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202112161640011_AdditionOfFeedback.resx">
+      <DependentUpon>202112161640011_AdditionOfFeedback.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202112161651473_UpdatesToFeedback.resx">
+      <DependentUpon>202112161651473_UpdatesToFeedback.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

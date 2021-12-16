@@ -53,9 +53,24 @@ namespace CafeArts.Controllers
 
         public ActionResult Contact()
         {
-            ViewBag.Message = "Your contact page.";
-
             return View();
+        }
+
+        public ActionResult SaveFeedback(Feedback feedbackmodel)
+        {
+            if(!ModelState.IsValid)
+            {
+                return View("Contact", feedbackmodel);
+            }
+            else
+            {
+                feedbackmodel.CreatedDate = DateTime.Now;
+                _context.Feedbacks.Add(feedbackmodel);
+                _context.SaveChanges();
+                TempData["FeedbackSuccess"] = "Query submitted successfully!";
+                return RedirectToAction("Contact");
+            }
+            
         }
     }
 }

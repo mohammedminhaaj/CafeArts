@@ -39,6 +39,7 @@ namespace CafeArts.Models
         public DbSet<Reviews> Review { get; set; }
         public DbSet<Order> orders { get; set; }
         public DbSet<Customize> Customizing { get; set; }
+        public DbSet<Feedback> Feedbacks { get; set; }
 
         
         public ApplicationDbContext()

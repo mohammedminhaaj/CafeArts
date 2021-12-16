@@ -1,17 +1,96 @@
-﻿@{
+﻿@model CafeArts.Models.Feedback
+
+@{
     ViewBag.Title = "Contact";
 }
-<h2>@ViewBag.Title.</h2>
-<h3>@ViewBag.Message</h3>
+<h2>Contact us.</h2>
+<h4>We're here to help you</h4>
+<p>Please select any one of the reasons below to continue. We will try responding to your queries as soon as possible.</p>
 
+@if (TempData.ContainsKey("FeedbackSuccess"))
+{
+    <p class="text-success">@TempData["FeedbackSuccess"]</p>
+}
+
+@using (Html.BeginForm("SaveFeedback", "Home", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(false,"",new { @class = "text-danger" })
+
+    <select id="Reason" name="Reason" class="form-control">
+        <option value="">Select a reason</option>
+        <option value="Technical">Technical issues</option>
+        <option value="Product">Issues related to product</option>
+        <option value="Refund">Request a refund</option>
+        <option value="Cancel">Cancel an order</option>
+        <option value="Other">Others</option>
+    </select>
+    <div id="form-area" class="form-group" style="display:none">
+        <br />
+        @Html.LabelFor(m => m.FullName)
+        @Html.TextBoxFor(m => m.FullName, new { @class = "form-control" })<br />
+        
+
+        @Html.LabelFor(m => m.Email)
+        @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })<br />
+        
+
+        @Html.LabelFor(m => m.Contact)
+        @Html.TextBoxFor(m => m.Contact, new { @class = "form-control" })<br />
+       
+
+        @Html.LabelFor(m => m.Message)
+        @Html.TextAreaFor(m => m.Message, new { @class = "form-control" })<br />
+        
+        <p class="text-danger" style="display:none" id="refund-note">Note: Refunds can only be processed if applied within 48 hours of delivery.</p>
+        <p class="text-danger" style="display:none" id="cancel-note">Note: Orders cannot be canceled once the product is delivered.</p><br />
+
+        <button type="submit" class="btn btn-default">Submit</button>
+    </div>
+}
+
+
+<hr />
+<h4>Want to share a feedback?</h4>
 <address>
-    One Microsoft Way<br />
-    Redmond, WA 98052-6399<br />
-    <abbr title="Phone">P:</abbr>
-    425.555.0100
+    <p>Please drop an email to <a href="mailto:cafeartscommunications@gmail.com">cafeartscommunications@gmail.com</a></p>
+    <p>You can also contact <a href="tel:7760485260">the developer</a> or <a href="tel:7411105614">the one who designs these products</a>.</p>
 </address>
 
-<address>
-    <strong>Support:</strong>   <a href="mailto:Support@example.com">Support@example.com</a><br />
-    <strong>Marketing:</strong> <a href="mailto:Marketing@example.com">Marketing@example.com</a>
-</address>
+<button class="btn btn-default" onclick="location.href = '@Url.Action("Index","Home")'"><i class="glyphicon glyphicon-arrow-left"></i> Home</button>
+
+@*<h4>Our address.</h4>
+    <address>
+        One Microsoft Way<br />
+        Redmond, WA 98052-6399<br />
+        <abbr title="Phone">P:</abbr>
+        425.555.0100
+    </address>*@
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            $('#Reason').on('change', function () {
+                if ($(this).val() == "") {
+                    document.getElementById("form-area").style.display = "none";
+                }
+                else {
+                    document.getElementById("form-area").style.display = "block";
+                    if ($(this).val() == "Refund") {
+                        document.getElementById("refund-note").style.display = "block";
+                        document.getElementById("cancel-note").style.display = "none";
+                    }
+                    else if ($(this).val() == "Cancel") {
+                        document.getElementById("cancel-note").style.display = "block";
+                        document.getElementById("refund-note").style.display = "none";
+                    }
+                    else {
+                        document.getElementById("refund-note").style.display = "none";
+                        document.getElementById("cancel-note").style.display = "none";
+                    }
+                }
+            });
+        });
+    </script>
+}
