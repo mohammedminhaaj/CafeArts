@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
@@ -32,9 +33,9 @@ namespace CafeArts.Controllers
 
         // GET: Product
         [HttpGet]
-        public ActionResult All(string search)
+        public async Task<ActionResult> All(string search)
         {
-            var products = _context.Products.ToList();
+            var products = await _context.Products.ToListAsync();
 
             ViewBag.SearchResult = "No products found for the search '" + search + "'";
 
@@ -51,26 +52,27 @@ namespace CafeArts.Controllers
             
         }
 
-        public ActionResult Clocks()
+        public async Task<ActionResult> Clocks()
         {
-            var products = _context.Products.ToList();
+            var products = await _context.Products.ToListAsync();
             return View("All",products.Where(m => m.IsActive && m.CategoryID == 46));
         }
 
-        public ActionResult Coasters()
+        public async Task<ActionResult> Coasters()
         {
-            var products = _context.Products.ToList();
+            var products = await _context.Products.ToListAsync();
             return View("All",products.Where(m => m.IsActive && m.CategoryID == 47));
         }
 
-        public ActionResult ProductDetails(int? id)
+        public async Task<ActionResult> ProductDetails(int? id)
         {
             if (id == null)
                 return HttpNotFound();
             try
             {
-                var ViewModel = new ProductReviews() { Prods = _context.Products.Single(m => m.Id == id) };
-                ViewBag.ReviewList = _context.Review.Include(m => m.ApplicationUsers).ToList().OrderByDescending(m => m.ReviewId);
+                var ViewModel = new ProductReviews() { Prods = await _context.Products.SingleAsync(m => m.Id == id) };
+                var ReviewList = await _context.Review.Include(m => m.ApplicationUsers).ToListAsync();
+                ViewBag.ReviewList = ReviewList.OrderByDescending(m => m.ReviewId);
                 
                 return View(ViewModel);
             }
@@ -87,7 +89,7 @@ namespace CafeArts.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult PostReview(ProductReviews rev)
+        public async Task<ActionResult> PostReview(ProductReviews rev)
         {
             if (rev.Revs.ReviewData==null && rev.Revs.Rating==null)
             {
@@ -100,7 +102,7 @@ namespace CafeArts.Controllers
                 rev.Revs.ProdID = rev.Prods.Id;
                 rev.Revs.MemberID = User.Identity.GetUserId();
                 _context.Review.Add(rev.Revs);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
                 return RedirectToAction("ProductDetails", new { id = rev.Prods.Id });
             }
 
@@ -108,34 +110,34 @@ namespace CafeArts.Controllers
 
 
         [PreventFromUrl]
-        public ActionResult DeleteReview(int id)
+        public async Task<ActionResult> DeleteReview(int id)
         {
-            var ReviewInDB = _context.Review.Single(m => m.ReviewId == id);
+            var ReviewInDB = await _context.Review.SingleAsync(m => m.ReviewId == id);
 
             if (ReviewInDB == null)
                 return HttpNotFound();
 
             ReviewInDB.IsValid = false;
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return RedirectToAction("ProductDetails", new { id = ReviewInDB.ProdID });
         }
 
-        public ActionResult CustomizeProduct()
+        public async Task<ActionResult> CustomizeProduct()
         {
-            var CustomModel = new Customize() { CategoriesForCustom = _context.Categories.ToList() };
+            var CustomModel = new Customize() { CategoriesForCustom = await _context.Categories.ToListAsync() };
             return View(CustomModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult SubmitCustomize(Customize customizeModel)
+        public async Task<ActionResult> SubmitCustomize(Customize customizeModel)
         {
             
 
             if (!ModelState.IsValid)
             {
-                customizeModel.CategoriesForCustom = _context.Categories.ToList();
+                customizeModel.CategoriesForCustom = await _context.Categories.ToListAsync();
                 return View("CustomizeProduct",customizeModel);
             }
 
@@ -143,7 +145,7 @@ namespace CafeArts.Controllers
             {
                 customizeModel.CreatedDate = DateTime.Now;
                 _context.Customizing.Add(customizeModel);
-                _context.SaveChanges();                
+                await _context.SaveChangesAsync();                
                 return RedirectToAction("RequestSuccess","Product", new { value = customizeModel.ContactNumber});
             }
             
@@ -156,9 +158,5 @@ namespace CafeArts.Controllers
             return View();
         }
 
-        public IEnumerator GetEnumerator()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

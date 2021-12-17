@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Configuration;
 using System.Web.Mvc;
@@ -28,16 +29,16 @@ namespace CafeArts.Controllers
 
         // GET: Cart
         [HttpGet]
-        public ActionResult MyCart()
+        public async Task<ActionResult> MyCart()
         {
-            var AllCarts = _context.Carts.Include(m => m.Product).ToList();
+            var AllCarts = await _context.Carts.Include(m => m.Product).ToListAsync();
             var CartInDB = AllCarts.FindAll(m => m.MemberID == User.Identity.GetUserId() && m.IsActive);
             return View(CartInDB);
         }
 
         
         [PreventFromUrl]
-        public ActionResult AddToCart(int id, int? quantity)
+        public async Task<ActionResult> AddToCart(int id, int? quantity)
         {
             var CurrentUser = User.Identity.GetUserId();
 
@@ -49,7 +50,7 @@ namespace CafeArts.Controllers
 
             var SearchModel = _context.Carts.Where(m => m.MemberID == CurrentUser && m.ProductID == id && m.IsActive);
 
-            if (SearchModel.Count()!=0)
+            if (await SearchModel.CountAsync()!=0)
             {
                 foreach(var cartitem in SearchModel)
                     _context.Carts.Remove(cartitem);
@@ -65,20 +66,20 @@ namespace CafeArts.Controllers
                 
             }
             _context.Carts.Add(CartModel);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return RedirectToAction("MyCart", "Cart");
 
         }
 
         [PreventFromUrl]
-        public ActionResult DeleteFromCart(int id)
+        public async Task<ActionResult> DeleteFromCart(int id)
         {
-            var DeleteModel = _context.Carts.Single(m => m.CartID == id);
+            var DeleteModel = await _context.Carts.SingleAsync(m => m.CartID == id);
             if (DeleteModel == null)
                 return HttpNotFound();
 
             _context.Carts.Remove(DeleteModel);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             TempData["Message"] = "Item removed succesfully";
 
             return RedirectToAction("MyCart", "Cart");
@@ -89,14 +90,15 @@ namespace CafeArts.Controllers
         public ActionResult CartCount()
         {
             var CurrentUser = User.Identity.GetUserId();
-            ViewBag.CartItemCount = _context.Carts.Where(m => m.MemberID == CurrentUser && m.IsActive).Count().ToString();
+            var CartItemCount = _context.Carts.Where(m => m.MemberID == CurrentUser && m.IsActive).Count();
+            ViewBag.CartItemCount = CartItemCount.ToString();
 
             return PartialView("_CartIcon");
 
         }
 
         [PreventFromUrl]
-        public ActionResult ShippingInformation()
+        public async Task<ActionResult> ShippingInformation()
         {
             var currentUser = User.Identity.GetUserId();
 
@@ -105,17 +107,22 @@ namespace CafeArts.Controllers
             ViewBag.CartItemSubTotal = CalculateTotal(ViewBag.CartDetails);
 
             ViewBag.CountItems = _context.Carts.Where(m => m.MemberID == currentUser && m.IsActive).Count();
-            ViewBag.UserDetails = _context.Users.Single(m => m.Id == currentUser);
-            ViewBag.StateList = _context.State.ToList();
 
-            var ShippingModel = _context.ShippingDets.Include(m => m.ApplicationUsers).SingleOrDefault(m => m.MemberID == currentUser);
+            ViewBag.UserDetails = await _context.Users.SingleAsync(m => m.Id == currentUser);
+
+            if (ViewBag.UserDetails == null)
+                return HttpNotFound();
+
+            ViewBag.StateList = await _context.State.ToListAsync();
+
+            var ShippingModel = await _context.ShippingDets.Include(m => m.ApplicationUsers).SingleOrDefaultAsync(m => m.MemberID == currentUser);
 
             return View(ShippingModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult SaveShippingAddress(ShippingDetails shippingmodel)
+        public async Task<ActionResult> SaveShippingAddress(ShippingDetails shippingmodel)
         {
             var currentUser = User.Identity.GetUserId();
 
@@ -126,8 +133,10 @@ namespace CafeArts.Controllers
                 ViewBag.CartItemSubTotal = CalculateTotal(ViewBag.CartDetails);
 
                 ViewBag.CountItems = _context.Carts.Where(m => m.MemberID == currentUser && m.IsActive).Count();
-                ViewBag.UserDetails = _context.Users.Single(m => m.Id == currentUser);
-                ViewBag.StateList = _context.State.ToList();
+                ViewBag.UserDetails = await _context.Users.SingleAsync(m => m.Id == currentUser);
+                if (ViewBag.UserDetails == null)
+                    return HttpNotFound();
+                ViewBag.StateList = await _context.State.ToListAsync();
 
                 return View("ShippingInformation", shippingmodel);
             }
@@ -143,7 +152,7 @@ namespace CafeArts.Controllers
 
                 else
                 {
-                    var ShippingInDB = _context.ShippingDets.Single(m => m.ShippingDetailsID == shippingmodel.ShippingDetailsID);
+                    var ShippingInDB = await _context.ShippingDets.SingleAsync(m => m.ShippingDetailsID == shippingmodel.ShippingDetailsID);
                     if (ShippingInDB == null)
                         return HttpNotFound();
                     ShippingInDB.MemberID = currentUser;
@@ -159,7 +168,7 @@ namespace CafeArts.Controllers
 
                 }
                 
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
 
 
 
@@ -174,12 +183,17 @@ namespace CafeArts.Controllers
         }
 
         [PreventFromUrl]
-        public ActionResult OtherPayment()
+        public async Task<ActionResult> OtherPayment()
         {
             Razorpay.Api.RazorpayClient client = new Razorpay.Api.RazorpayClient(WebConfigurationManager.AppSettings["RazorPayId"], WebConfigurationManager.AppSettings["RazorPaySecret"]);
             var curUser = User.Identity.GetUserId();
-            var ShippingDetailsModel = _context.ShippingDets.Single(m => m.MemberID == curUser);
-            var UserModel = _context.Users.Single(m => m.Id == curUser);
+            var ShippingDetailsModel = await _context.ShippingDets.SingleAsync(m => m.MemberID == curUser);
+            if (ShippingDetailsModel == null)
+                return HttpNotFound();
+            var UserModel = await _context.Users.SingleAsync(m => m.Id == curUser);
+
+            if (UserModel == null)
+                return HttpNotFound();
 
             Dictionary<string, object> options = new Dictionary<string, object>();
             if (ShippingDetailsModel.Amount == 0)
@@ -251,11 +265,15 @@ namespace CafeArts.Controllers
         }
 
         [PreventFromUrl]
-        public ActionResult OrderSuccess()
+        public async Task<ActionResult> OrderSuccess()
         {
             var CurrentUser = User.Identity.GetUserId();
-            var ShippingDetailsModel = _context.ShippingDets.Single(m => m.MemberID == CurrentUser);
-            var UserModel = _context.Users.Single(m => m.Id == CurrentUser);
+            var ShippingDetailsModel = await _context.ShippingDets.SingleAsync(m => m.MemberID == CurrentUser);
+            if (ShippingDetailsModel == null)
+                return HttpNotFound();
+            var UserModel = await _context.Users.SingleAsync(m => m.Id == CurrentUser);
+            if (UserModel == null)
+                return HttpNotFound();
 
             var order = new Order()
             {
@@ -291,7 +309,7 @@ namespace CafeArts.Controllers
 
             _context.orders.Add(order);
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             var CartModel = _context.Carts.Where(m => m.MemberID == order.MemberID && m.IsActive);
 
@@ -301,18 +319,18 @@ namespace CafeArts.Controllers
                 modifyCart.OrderID = order.OrderID;
             }
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return RedirectToAction("OrderPlaced","Cart", new { id = order.OrderID});
 
         }
        
         [PreventFromUrl]
-        public ActionResult OrderPlaced(int id)
+        public async Task<ActionResult> OrderPlaced(int id)
         {
             var CurrentUser = User.Identity.GetUserId();
             var CartDetailsModel = _context.Carts.Include(m => m.Product).Where(m => m.OrderID == id);
-            ViewBag.OrderDetails = _context.orders.Single(m => m.OrderID == id && m.MemberID == CurrentUser);
+            ViewBag.OrderDetails = await _context.orders.SingleAsync(m => m.OrderID == id && m.MemberID == CurrentUser);
             if (ViewBag.OrderDetails == null)
                 return HttpNotFound();
 

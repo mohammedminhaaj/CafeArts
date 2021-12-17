@@ -98,7 +98,7 @@
 
                     </div>
                 </div>
-
+                
 
             </div>
 
@@ -282,7 +282,7 @@
                                         <li style="list-style-type:none">
 
                                             <h5 style="color: #165A72" class="mr-2">
-                                                @RevList.ApplicationUsers.FirstName @RevList.ApplicationUsers.LastName
+                                                <span data-toggle="tooltip" data-placement="top" title="@RevList.ApplicationUsers.Email">@RevList.ApplicationUsers.FirstName @RevList.ApplicationUsers.LastName</span>
 
                                                 @if (RevList.Rating != null)
                                                 {
@@ -302,7 +302,7 @@
                                                     @Html.ActionLink("Delete", "DeleteReview", "Product", new { id = RevList.ReviewId }, new { @class = "pull-right" })
                                                 </small>
                                             }
-
+                                            
                                             <span class="mb-1 ml-2"><small>@TimeElapsed.GetTime(RevList.ReviewCreatedDate)</small></span>
                                             @if (RevList.ReviewData != null)
                                             {<div class="comment-text-sm"><span>" @RevList.ReviewData "</span></div>}
@@ -350,6 +350,8 @@
                 var value = $('.quantity').val();
                 window.location.href = url + '?id=' + @Model.Prods.Id+"&quantity=" + value;
             });
+
+            $('[data-toggle="tooltip"]').tooltip()
         });
     </script>
 }

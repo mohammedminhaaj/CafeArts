@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web;
 using System.Data.Entity;
 using System.Web.Mvc;
+using System.Threading.Tasks;
 
 namespace CafeArts.Controllers
 {
@@ -24,7 +25,7 @@ namespace CafeArts.Controllers
         }
 
         [HttpGet]
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
             if (User.IsInRole("Admin"))
             {
@@ -36,9 +37,12 @@ namespace CafeArts.Controllers
                 var random = new Random();
                 ViewBag.Products = _context.Products.Include(p => p.Category).Where(m => m.IsFeatured);
                 var RandomReviews = _context.Review.Include(m => m.prod).Include(m => m.ApplicationUsers).Where(m => m.Rating == "Like" && !(m.ReviewData == null));
-                ViewBag.FirstReview = RandomReviews.ToList().ElementAt(random.Next(RandomReviews.Count()));
-                ViewBag.SecondReview = RandomReviews.ToList().ElementAt(random.Next(RandomReviews.Count()));
-                ViewBag.ThirdReview = RandomReviews.ToList().ElementAt(random.Next(RandomReviews.Count()));
+                var FirstReview = await RandomReviews.ToListAsync();
+                ViewBag.FirstReview = FirstReview.ElementAt(random.Next(await RandomReviews.CountAsync()));
+                var SecondReview = await RandomReviews.ToListAsync();
+                ViewBag.SecondReview = SecondReview.ElementAt(random.Next(await RandomReviews.CountAsync()));
+                var ThirdReview = await RandomReviews.ToListAsync();
+                ViewBag.ThirdReview = ThirdReview.ElementAt(random.Next(await RandomReviews.CountAsync()));
                 return View();
             }
             
@@ -56,7 +60,7 @@ namespace CafeArts.Controllers
             return View();
         }
 
-        public ActionResult SaveFeedback(Feedback feedbackmodel)
+        public async Task<ActionResult> SaveFeedback(Feedback feedbackmodel)
         {
             if(!ModelState.IsValid)
             {
@@ -66,7 +70,7 @@ namespace CafeArts.Controllers
             {
                 feedbackmodel.CreatedDate = DateTime.Now;
                 _context.Feedbacks.Add(feedbackmodel);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
                 TempData["FeedbackSuccess"] = "Query submitted successfully!";
                 return RedirectToAction("Contact");
             }

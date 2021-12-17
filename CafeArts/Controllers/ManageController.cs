@@ -335,11 +335,11 @@ namespace CafeArts.Controllers
 
 
         [Authorize]
-        public ActionResult EditProfile(string id)
+        public async Task<ActionResult> EditProfile(string id)
         {
             try
             {
-                var ViewModel = _context.Users.Single(m => m.Id == id);
+                var ViewModel = await _context.Users.SingleAsync(m => m.Id == id);
                 return View(ViewModel);
             }
 
@@ -354,7 +354,7 @@ namespace CafeArts.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [PreventFromUrl]
-        public ActionResult EditProfile([Bind(Include ="Id,FirstName,LastName")]ApplicationUser model)
+        public async Task<ActionResult> EditProfile([Bind(Include ="Id,FirstName,LastName")]ApplicationUser model)
         {
             if (!ModelState.IsValid)
             {
@@ -363,13 +363,16 @@ namespace CafeArts.Controllers
             }
             
 
-            var UserInDB = _context.Users.Single(m => m.Id == model.Id);
+            var UserInDB = await _context.Users.SingleAsync(m => m.Id == model.Id);
+
+            if (UserInDB == null)
+                return HttpNotFound();
 
             UserInDB.FirstName = model.FirstName;
             UserInDB.LastName = model.LastName;
 
             
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return RedirectToAction("Index", new { Message = ManageMessageId.ProfileUpdateSuccess });
         }

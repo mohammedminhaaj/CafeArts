@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
@@ -31,9 +32,9 @@ namespace CafeArts.Controllers
         }
 
         [HttpGet]
-        public ActionResult Categories()
+        public async Task<ActionResult> Categories()
         {
-            var categories = _context.Categories.ToList();
+            var categories = await _context.Categories.ToListAsync();
             return View(categories);
         }
 
@@ -45,7 +46,7 @@ namespace CafeArts.Controllers
 
         [ValidateAntiForgeryToken]
         [HttpPost]
-        public ActionResult CreateCategory([Bind(Exclude ="CategoryID")]Category category)
+        public async Task<ActionResult> CreateCategory([Bind(Exclude ="CategoryID")]Category category)
         {
             if (!ModelState.IsValid)
             {
@@ -61,16 +62,16 @@ namespace CafeArts.Controllers
                 
                 _context.Categories.Add(category);
 
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
         
                 return RedirectToAction("Categories", "Admin");
 
             }
         }
 
-        public ActionResult ModifyCategory(int id)
+        public async Task<ActionResult> ModifyCategory(int id)
         {
-            var Cat = _context.Categories.Single(m => m.CategoryID == id);
+            var Cat = await _context.Categories.SingleAsync(m => m.CategoryID == id);
             if (Cat == null)
                 return HttpNotFound();
 
@@ -86,7 +87,7 @@ namespace CafeArts.Controllers
 
         [ValidateAntiForgeryToken]
         [HttpPost]
-        public ActionResult UpdateCategory(Category category)
+        public async Task<ActionResult> UpdateCategory(Category category)
         {
             if (!ModelState.IsValid)
             {
@@ -100,7 +101,7 @@ namespace CafeArts.Controllers
             else
             {
 
-                var CategoryInDB = _context.Categories.Single(m => m.CategoryID == category.CategoryID);
+                var CategoryInDB = await _context.Categories.SingleAsync(m => m.CategoryID == category.CategoryID);
                 if (CategoryInDB == null)
                     return HttpNotFound();
 
@@ -109,7 +110,7 @@ namespace CafeArts.Controllers
 
                     CategoryInDB.CategoryName = category.CategoryName;
 
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
 
                     return RedirectToAction("Categories", "Admin");
 
@@ -137,18 +138,18 @@ namespace CafeArts.Controllers
         //}
 
         [HttpGet]
-        public ActionResult Products()
+        public async Task<ActionResult> Products()
         {
             
-            var products = _context.Products.ToList();
+            var products = await _context.Products.ToListAsync();
             
             return View(products);
         }
 
         
-        public ActionResult AddProduct()
+        public async Task<ActionResult> AddProduct()
         {
-            var Cat = _context.Categories.ToList();
+            var Cat = await _context.Categories.ToListAsync();
             var ViewModel = new ProductCategories
             { Categories = Cat };
             return View(ViewModel);
@@ -156,7 +157,7 @@ namespace CafeArts.Controllers
 
         [ValidateAntiForgeryToken]
         [HttpPost]
-        public ActionResult CreateProduct(ProductCategories Prod, HttpPostedFileBase Image1, HttpPostedFileBase Image2, HttpPostedFileBase Image3, HttpPostedFileBase Image4)
+        public async Task<ActionResult> CreateProduct(ProductCategories Prod, HttpPostedFileBase Image1, HttpPostedFileBase Image2, HttpPostedFileBase Image3, HttpPostedFileBase Image4)
         {
 
             if (!ModelState.IsValid)
@@ -164,7 +165,7 @@ namespace CafeArts.Controllers
                 var ViewModel = new ProductCategories
                 {
                     Products = Prod.Products,
-                    Categories = _context.Categories.ToList()
+                    Categories = await _context.Categories.ToListAsync()
                 };
                 return View("AddProduct", ViewModel);
             }
@@ -207,23 +208,23 @@ namespace CafeArts.Controllers
 
                 _context.Products.Add(Prod.Products);
 
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
 
                 return RedirectToAction("Products", "Admin");
 
             }
         }
 
-        public ActionResult ModifyProduct(int id)
+        public async Task<ActionResult> ModifyProduct(int id)
         {
-            var prod = _context.Products.Single(m => m.Id == id);
+            var prod = await _context.Products.SingleAsync(m => m.Id == id);
             if (prod == null)
                 return HttpNotFound();
 
             var ViewModel = new ProductCategories
             {
                 Products = prod,
-                Categories = _context.Categories.ToList()
+                Categories = await _context.Categories.ToListAsync()
             };
 
             return View("ModifyProduct", ViewModel);
@@ -231,14 +232,14 @@ namespace CafeArts.Controllers
 
         [ValidateAntiForgeryToken]
         [HttpPost]
-        public ActionResult UpdateProduct(ProductCategories Prod, HttpPostedFileBase Image1, HttpPostedFileBase Image2, HttpPostedFileBase Image3, HttpPostedFileBase Image4)
+        public async Task<ActionResult> UpdateProduct(ProductCategories Prod, HttpPostedFileBase Image1, HttpPostedFileBase Image2, HttpPostedFileBase Image3, HttpPostedFileBase Image4)
         {
             if (!ModelState.IsValid)
             {
                 var ViewModel = new ProductCategories
                 {
                     Products = Prod.Products,
-                    Categories = _context.Categories.ToList()
+                    Categories = await _context.Categories.ToListAsync()
                 };
                 return View("ModifyProduct", ViewModel);
             }
@@ -277,7 +278,7 @@ namespace CafeArts.Controllers
                     }
                 }
 
-                var ProductInDB = _context.Products.Single(m => m.Id == Prod.Products.Id);
+                var ProductInDB = await _context.Products.SingleAsync(m => m.Id == Prod.Products.Id);
                 if (ProductInDB == null)
                     return HttpNotFound();
                 else
@@ -304,7 +305,7 @@ namespace CafeArts.Controllers
                     ProductInDB.CategoryID = Prod.Products.CategoryID;
 
 
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
 
                     return RedirectToAction("Products", "Admin");
 
@@ -346,11 +347,14 @@ namespace CafeArts.Controllers
         }
 
         
-        public ActionResult ConfirmOrder(int id)
+        public async Task<ActionResult> ConfirmOrder(int id)
         {
-            var OrderInDB = _context.orders.Single(m => m.OrderID == id);
+            var OrderInDB = await _context.orders.SingleAsync(m => m.OrderID == id);
+            if (OrderInDB == null)
+                return HttpNotFound();
+
             OrderInDB.OrderStatus = "Confirmed";
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return RedirectToAction("Orders","Admin");
         }
 
@@ -359,19 +363,25 @@ namespace CafeArts.Controllers
             return View("Orders", _context.orders.Where(m => m.OrderStatus == "Confirmed"));
         }
 
-        public ActionResult OrderDetails(int id)
+        public async Task<ActionResult> OrderDetails(int id)
         {
             var CartModel = _context.Carts.Include(m => m.Product).Where(m => m.OrderID == id && !m.IsActive);
-            ViewBag.SingleOrderDetails = _context.orders.Single(m => m.OrderID == id);
+            ViewBag.SingleOrderDetails = await _context.orders.SingleAsync(m => m.OrderID == id);
+            if (ViewBag.SingleOrderDetails == null)
+                return HttpNotFound();
             return View(CartModel);
         }
 
-        public ActionResult CheckAsDelivered(int id)
+        public async Task<ActionResult> CheckAsDelivered(int id)
         {
-            var OrderInDB = _context.orders.Single(m => m.OrderID == id);
+            var OrderInDB = await _context.orders.SingleAsync(m => m.OrderID == id);
+
+            if (OrderInDB == null)
+                return HttpNotFound();
+
             OrderInDB.OrderStatus = "Delivered";
             OrderInDB.DeliveryDate = DateTime.Now;
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return RedirectToAction("PostConfirmationOrders", "Admin");
         }
 
@@ -380,34 +390,43 @@ namespace CafeArts.Controllers
             return View("Orders", _context.orders.Where(m => m.OrderStatus == "Delivered" || m.OrderStatus == "Canceled" || m.OrderStatus == "In transit"));
         }
 
-        public ActionResult CancelOrder(int id)
+        public async Task<ActionResult> CancelOrder(int id)
         {
-            var OrderInDB = _context.orders.Single(m => m.OrderID == id);
+            var OrderInDB = await _context.orders.SingleAsync(m => m.OrderID == id);
+
+            if (OrderInDB == null)
+                return HttpNotFound();
+
             OrderInDB.OrderStatus = "Canceled";
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return RedirectToAction("PostConfirmationOrders", "Admin");
         }
 
-        public ActionResult AddWayBill(int id, string waybill)
+        public async Task<ActionResult> AddWayBill(int id, string waybill)
         {
-            var OrderInDB = _context.orders.Single(m => m.OrderID == id);
+            var OrderInDB = await _context.orders.SingleAsync(m => m.OrderID == id);
+
+            if (OrderInDB == null)
+                return HttpNotFound();
+
             if (waybill == "")
             {
                 TempData["ErrorForWayBill"] = "Cannot submit empty waybill!";
                 return RedirectToAction("OrderDetails","Admin", new { id = OrderInDB.OrderID});
 
             }
+
             else
             {
                 OrderInDB.WayBill = waybill;
                 OrderInDB.OrderStatus = "In transit";
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
                 return RedirectToAction("OrderDetails", "Admin", new { id = OrderInDB.OrderID });
             }
 
         }
 
-        public ActionResult ModifyOrder(int? id)
+        public async Task<ActionResult> ModifyOrder(int? id)
         {
             if (id == null)
             {
@@ -418,12 +437,15 @@ namespace CafeArts.Controllers
             else
             {
                 ViewBag.Header = "Edit Order";
-                var OrderModel = _context.orders.Single(m => m.OrderID == id);
+                var OrderModel = await _context.orders.SingleAsync(m => m.OrderID == id);
+                if (OrderModel == null)
+                    return HttpNotFound();
+
                 return View(OrderModel);
             }
         }
 
-        public ActionResult PostOrder(Order ordermodel)
+        public async Task<ActionResult> PostOrder(Order ordermodel)
         {
             if(!ModelState.IsValid)
             {
@@ -444,36 +466,44 @@ namespace CafeArts.Controllers
                         ordermodel.TransactionID = "Not available";
                     }
                     _context.orders.Add(ordermodel);
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
                     return RedirectToAction("Orders");
                 }
 
                 else
                 {
-                    var OrderInDB = _context.orders.Single(m => m.OrderID == ordermodel.OrderID);
+                    var OrderInDB = await _context.orders.SingleAsync(m => m.OrderID == ordermodel.OrderID);
+                    if (OrderInDB == null)
+                        return HttpNotFound();
+
                     TryUpdateModel(OrderInDB);
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
                     return RedirectToAction("Orders");
                 }
             }
         }
 
-        public ActionResult CustomizeRequests()
+        public async Task<ActionResult> CustomizeRequests()
         {
-            var CustomizeModel = _context.Customizing.Include(m => m.Categories).ToList();
+            var CustomizeModel = await _context.Customizing.Include(m => m.Categories).ToListAsync();
             return View(CustomizeModel);
         }
 
-        public ActionResult DeleteCustomize(int id)
+        public async Task<ActionResult> DeleteCustomize(int id)
         {
-            _context.Customizing.Remove(_context.Customizing.Single(m => m.CustomizeID == id));
-            _context.SaveChanges();
+            var RemoveModel = await _context.Customizing.SingleAsync(m => m.CustomizeID == id);
+
+            if (RemoveModel == null)
+                return HttpNotFound();
+
+            _context.Customizing.Remove(RemoveModel);
+            await _context.SaveChangesAsync();
             return RedirectToAction("CustomizeRequests");
         }
 
-        public ActionResult Queries()
+        public async Task<ActionResult> Queries()
         {
-            var QueryModel = _context.Feedbacks.ToList();
+            var QueryModel = await _context.Feedbacks.ToListAsync();
             return View(QueryModel);
         }
 
