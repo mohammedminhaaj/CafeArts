@@ -1,0 +1,36 @@
+﻿
+@{
+    ViewBag.Title = "Slide Images";
+    Layout = "~/Views/Shared/Admin_LayoutPage.cshtml";
+}
+
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Slide images</h1>
+</div>
+
+@if (TempData.ContainsKey("SlideSuccess"))
+{
+    <p class="text-success">@TempData["SlideSuccess"]</p>
+}
+
+
+@using (Html.BeginForm("PostSlides", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <label>Image for Slide 1</label>
+    <br />
+    <input type="file" name="Slide1" class=" btn btn-primary" />
+    <br />
+    <br />
+    <label>Image for Slide 2</label>
+    <br />
+    <input type="file" name="Slide2" class=" btn btn-primary" />
+    <br />
+    <br />
+    <label>Image for Slide 3</label>
+    <br />
+    <input type="file" name="Slide3" class=" btn btn-primary" />
+    <br />
+    <br />
+    <button type="submit" class="btn btn-primary">Submit</button>
+}
+

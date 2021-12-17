@@ -34,7 +34,6 @@ namespace CafeArts.Models
         public DbSet<Cart> Carts { get; set; }     
         public DbSet<Category> Categories { get; set; }       
         public DbSet<ShippingDetails> ShippingDets { get; set; }
-        public DbSet<SlideImage> SlideImages { get; set; }
         public DbSet<States> State { get; set; }
         public DbSet<Reviews> Review { get; set; }
         public DbSet<Order> orders { get; set; }

@@ -128,15 +128,15 @@ textarea {
 }
 
 .fade-carousel .slides .slide-1 {
-    background-image: url(https://images.unsplash.com/photo-1583339824000-5afecfd41835?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=387&q=80);
+    background-image: url('../Content/Img/Slide1.jpg');
 }
 
 .fade-carousel .slides .slide-2 {
-    background-image: url(https://images.unsplash.com/photo-1517816743773-6e0fd518b4a6?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1170&q=80);
+    background-image: url('../Content/Img/Slide2.jpg');
 }
 
 .fade-carousel .slides .slide-3 {
-    background-image: url(https://images.unsplash.com/photo-1515339760107-1952b7a08454?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1169&q=80);
+    background-image: url('../Content/Img/Slide3.jpg');
 }
 
 .menu_text{

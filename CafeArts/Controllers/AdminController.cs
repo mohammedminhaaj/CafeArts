@@ -3,6 +3,7 @@ using CafeArts.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -474,6 +475,35 @@ namespace CafeArts.Controllers
         {
             var QueryModel = _context.Feedbacks.ToList();
             return View(QueryModel);
+        }
+
+        public ActionResult SlideImages()
+        {
+            return View();
+        }
+
+        public ActionResult PostSlides(HttpPostedFileBase Slide1, HttpPostedFileBase Slide2, HttpPostedFileBase Slide3)
+        {
+            if(Slide1 != null)
+            {
+                string path = Path.Combine(Server.MapPath("~/Content/Img"), "Slide1.jpg");
+                Slide1.SaveAs(path);
+            }
+
+            if (Slide2 != null)
+            {
+                string path = Path.Combine(Server.MapPath("~/Content/Img"), "Slide2.jpg");
+                Slide2.SaveAs(path);
+            }
+
+            if (Slide3 != null)
+            {
+                string path = Path.Combine(Server.MapPath("~/Content/Img"), "Slide3.jpg");
+                Slide3.SaveAs(path);
+            }
+
+            TempData["SlideSuccess"] = "Submit success!";
+            return RedirectToAction("SlideImages");
         }
     }
 }
