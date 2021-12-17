@@ -9,8 +9,10 @@
     <h1 class="h3 mb-0 text-gray-800">Orders</h1>
 </div>
 
-<table class="table table-bordered table-hover" width="100%">
+<a href="@Url.Action("ModifyOrder","Admin")" class="btn btn-primary">Create</a><br /><br />
 
+
+<table class="table table-bordered table-hover" width="100%">
 
 
     @if (!Model.Any())
@@ -38,6 +40,7 @@
                 <th>Type</th>
                 <th>WayBill</th>
                 <th>Status</th>
+                <th>Action</th>
             </tr>
         </thead>
 
@@ -95,6 +98,9 @@
                         }
 
                         @*<button type="button" class="btn btn-primary" value="UpdateCategory" onclick="location.href = '@Url.Action("UpdateCategory(item.CategoryID)","Admin")'">Edit</button>*@
+                    </td>
+                    <td>
+                        <a href="@Url.Action("ModifyOrder","Admin", new { id = item.OrderID})" class="btn btn-primary">Edit</a>
                     </td>
 
 

@@ -1,0 +1,56 @@
+﻿@model CafeArts.Models.Order
+
+@{
+    ViewBag.Title = "Modify Order";
+    Layout = "~/Views/Shared/Admin_LayoutPage.cshtml";
+}
+
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">@ViewBag.Header</h1>
+</div>
+
+@using (Html.BeginForm("PostOrder", "Admin", FormMethod.Post))
+{
+<div class="form-group" style="width: 30%">
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.OrderID)
+
+    @if (Model == null)
+    {
+        @Html.LabelFor(m => m.OrderType)
+        <select id="OrderType" name="OrderType" class="form-control">
+            <option value="Cash on delivery">Cash on delivery</option>
+            <option value="Online">Online</option>
+        </select><br />
+
+        @Html.LabelFor(m => m.TotalAmount)
+        @Html.TextBoxFor(m => m.TotalAmount, new { @class = "form-control" })<br />
+    }
+
+    @Html.LabelFor(m => m.RazorPayKey)
+    @Html.TextBoxFor(m => m.RazorPayKey, new { @class = "form-control" })
+    <p class="text-success">starts with 'rzp'(ex: rzp_test_FRxBr6rlevPGjB)</p><br />
+
+    @Html.LabelFor(m => m.TransactionID)
+    @Html.TextBoxFor(m => m.TransactionID, new { @class = "form-control" })
+    <p class="text-success">starts with 'order'(ex: order_ITsAjobqg4YNv3)</p><br />
+
+    @Html.LabelFor(m => m.RPUniquePaymentID)
+    @Html.TextBoxFor(m => m.RPUniquePaymentID, new { @class = "form-control" })
+    <p class="text-success">starts with 'pay'(ex: pay_ITsAr07Pa2ZmPU)</p><br />
+
+    @Html.LabelFor(m => m.CustomerName)
+    @Html.TextBoxFor(m => m.CustomerName, new { @class = "form-control" })<br />
+
+    @Html.LabelFor(m => m.CustomerEmail)
+    @Html.TextBoxFor(m => m.CustomerEmail, new { @class = "form-control" })<br />
+
+    @Html.LabelFor(m => m.CustomerContact)
+    @Html.TextBoxFor(m => m.CustomerContact, new { @class = "form-control" })<br />
+
+    @Html.LabelFor(m => m.CustomerAddress)
+    @Html.TextAreaFor(m => m.CustomerAddress, new { @class = "form-control" })<br />
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+</div>
+}

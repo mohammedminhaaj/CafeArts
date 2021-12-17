@@ -369,6 +369,7 @@ namespace CafeArts.Controllers
         {
             var OrderInDB = _context.orders.Single(m => m.OrderID == id);
             OrderInDB.OrderStatus = "Delivered";
+            OrderInDB.DeliveryDate = DateTime.Now;
             _context.SaveChanges();
             return RedirectToAction("PostConfirmationOrders", "Admin");
         }
@@ -403,6 +404,57 @@ namespace CafeArts.Controllers
                 return RedirectToAction("OrderDetails", "Admin", new { id = OrderInDB.OrderID });
             }
 
+        }
+
+        public ActionResult ModifyOrder(int? id)
+        {
+            if (id == null)
+            {
+                ViewBag.Header = "Add Order";
+                return View();
+            }
+                
+            else
+            {
+                ViewBag.Header = "Edit Order";
+                var OrderModel = _context.orders.Single(m => m.OrderID == id);
+                return View(OrderModel);
+            }
+        }
+
+        public ActionResult PostOrder(Order ordermodel)
+        {
+            if(!ModelState.IsValid)
+            {
+                return View("ModifyOrder", ordermodel);
+            }
+
+            else
+            {
+                if(ordermodel.OrderID == null)
+                {
+                    ordermodel.OrderStatus = "Ordered";
+                    ordermodel.CreatedDate = DateTime.Now;
+                    ordermodel.WayBill = "NA";
+                    if (ordermodel.OrderType == "Cash on delivery")
+                    {
+                        ordermodel.RazorPayKey = "Not available";
+                        ordermodel.RPUniquePaymentID = "Not available";
+                        ordermodel.TransactionID = "Not available";
+                    }
+                    _context.orders.Add(ordermodel);
+                    _context.SaveChanges();
+                    return RedirectToAction("Orders");
+                }
+
+                else
+                {
+                    var OrderInDB = _context.orders.Single(m => m.OrderID == ordermodel.OrderID);
+                    TryUpdateModel(OrderInDB);
+                    _context.SaveChanges();
+                    return RedirectToAction("Orders");
+                }
+            }
         }
 
         public ActionResult CustomizeRequests()

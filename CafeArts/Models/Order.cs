@@ -25,6 +25,7 @@ namespace CafeArts.Models
         public string CustomerAddress { get; set; }
         public float TotalAmount { get; set; }
         public DateTime? CreatedDate { get; set; }
+        public DateTime? DeliveryDate { get; set; }
         public string OrderType { get; set; }
         public string OrderStatus { get; set; }
 

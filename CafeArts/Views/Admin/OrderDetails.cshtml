@@ -29,6 +29,8 @@
     <dd>@ViewBag.SingleOrderDetails.TotalAmount.ToString("C")</dd>
     <dt>Created on:</dt>
     <dd>@ViewBag.SingleOrderDetails.CreatedDate</dd>
+    <dt>Delivered on:</dt>
+    <dd>@ViewBag.SingleOrderDetails.DeliveryDate</dd>
     <dt>Order type:</dt>
     <dd>@ViewBag.SingleOrderDetails.OrderType</dd>
     <dt>Order status:</dt>
@@ -55,7 +57,7 @@
     </dd>
 </dl>
 <br />
-@if (!(ViewBag.SingleOrderDetails.OrderStatus == "Delivered" || ViewBag.SingleOrderDetails.OrderStatus == "Canceled"))
+@if (ViewBag.SingleOrderDetails.OrderStatus == "In transit")
 {
     <a href="@Url.Action("CheckAsDelivered","Admin",new { id = ViewBag.SingleOrderDetails.OrderID })" class="btn btn-primary">Check as delivered</a>
     <br />

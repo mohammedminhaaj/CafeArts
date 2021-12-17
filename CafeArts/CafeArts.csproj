@@ -355,6 +355,10 @@
     <Compile Include="Migrations\202112161651473_UpdatesToFeedback.Designer.cs">
       <DependentUpon>202112161651473_UpdatesToFeedback.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202112161759512_AddingDeliveryDateToOrders.cs" />
+    <Compile Include="Migrations\202112161759512_AddingDeliveryDateToOrders.Designer.cs">
+      <DependentUpon>202112161759512_AddingDeliveryDateToOrders.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ByteArrayToImageConverter.cs" />
@@ -2316,6 +2320,7 @@
     <Content Include="Views\Product\RequestSuccess.cshtml" />
     <Content Include="Views\Admin\CustomizeRequests.cshtml" />
     <Content Include="Views\Admin\Queries.cshtml" />
+    <Content Include="Views\Admin\ModifyOrder.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -2465,6 +2470,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202112161651473_UpdatesToFeedback.resx">
       <DependentUpon>202112161651473_UpdatesToFeedback.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202112161759512_AddingDeliveryDateToOrders.resx">
+      <DependentUpon>202112161759512_AddingDeliveryDateToOrders.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
