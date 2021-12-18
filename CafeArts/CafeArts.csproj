@@ -363,6 +363,22 @@
     <Compile Include="Migrations\202112171035137_RemoveSlideImages.Designer.cs">
       <DependentUpon>202112171035137_RemoveSlideImages.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202112180717290_UpdatesToCustomizeProduct.cs" />
+    <Compile Include="Migrations\202112180717290_UpdatesToCustomizeProduct.Designer.cs">
+      <DependentUpon>202112180717290_UpdatesToCustomizeProduct.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202112180829357_AddingIsCustomizedInOrders.cs" />
+    <Compile Include="Migrations\202112180829357_AddingIsCustomizedInOrders.Designer.cs">
+      <DependentUpon>202112180829357_AddingIsCustomizedInOrders.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202112181516357_AddingIsValidToCustomize.cs" />
+    <Compile Include="Migrations\202112181516357_AddingIsValidToCustomize.Designer.cs">
+      <DependentUpon>202112181516357_AddingIsValidToCustomize.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202112181533297_ChangeFromIsValidToIsActive.cs" />
+    <Compile Include="Migrations\202112181533297_ChangeFromIsValidToIsActive.Designer.cs">
+      <DependentUpon>202112181533297_ChangeFromIsValidToIsActive.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ByteArrayToImageConverter.cs" />
@@ -2480,6 +2496,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202112171035137_RemoveSlideImages.resx">
       <DependentUpon>202112171035137_RemoveSlideImages.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202112180717290_UpdatesToCustomizeProduct.resx">
+      <DependentUpon>202112180717290_UpdatesToCustomizeProduct.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202112180829357_AddingIsCustomizedInOrders.resx">
+      <DependentUpon>202112180829357_AddingIsCustomizedInOrders.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202112181516357_AddingIsValidToCustomize.resx">
+      <DependentUpon>202112181516357_AddingIsValidToCustomize.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202112181533297_ChangeFromIsValidToIsActive.resx">
+      <DependentUpon>202112181533297_ChangeFromIsValidToIsActive.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

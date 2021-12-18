@@ -161,21 +161,31 @@
 
                                                     <dt style="color: #165A72">Ordered products:</dt>
                                                     <dd>
-                                                        <ul>
+                                                        @if (order.IsCustomized)
+                                                        {
+                                                            <p>Customized product</p>
+                                                        }
 
-                                                            @foreach (var cartitems in Model.CartItems)
-                                                            {
-                                                                if (cartitems.OrderID == order.OrderID)
+                                                        else
+                                                        {
+                                                            <ul>
+
+                                                                @foreach (var cartitems in Model.CartItems)
                                                                 {
-                                                                    <li>
-                                                                        <a href="@Url.Action("ProductDetails","Product", new { id = cartitems.Product.Id})" style="text-decoration:none">
-                                                                            @cartitems.Product.ProductName
-                                                                        </a>(<small>x</small>@cartitems.Quantity) - @cartitems.Product.ProductPrice.ToString("C0")/each
-                                                                    </li>
-                                                                }
-                                                            }
+                                                                    if (cartitems.OrderID == order.OrderID)
+                                                                    {
+                                                                        <li>
+                                                                            <a href="@Url.Action("ProductDetails","Product", new { id = cartitems.Product.Id})" style="text-decoration:none">
+                                                                                @cartitems.Product.ProductName
+                                                                            </a>(<small>x</small>@cartitems.Quantity) - @cartitems.Product.ProductPrice.ToString("C0")/each
+                                                                        </li>
+                                                                    }
 
-                                                        </ul>
+                                                                }
+
+                                                            </ul>
+                                                        }
+
 
                                                     </dd>
                                                     <dt style="color: #165A72">Total amount:</dt>

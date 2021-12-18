@@ -165,7 +165,7 @@ namespace CafeArts.Controllers
                     //Send an email with this link
                     string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                    await UserManager.SendEmailAsync(user.Id, "Confirm your account", "<!DOCTYPE html><html><head><style>*{font-family:\"Raleway\", \"Helvetica Neue\", Helvetica, Arial, sans-serif;}.block{box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);padding: 10px;}</style></head><body><div class=\"block\"><h1>Hey there!</h1><p>Thank you for joining Cafe Arts. To finish registration, please click the link below</p><p><a href=\"" + callbackUrl + "\">Confirm account</a></p><p><small>Thanks and regards,<br>Team Cafe Arts</small></p></div></body></html>");
 
                     return View("RegisterConfirmation");
                 }
@@ -217,7 +217,7 @@ namespace CafeArts.Controllers
                 //Send an email with this link
                 string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
                 var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                await UserManager.SendEmailAsync(user.Id, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                await UserManager.SendEmailAsync(user.Id, "Reset Password", "<!DOCTYPE html><html><head><style>*{font-family:\"Raleway\", \"Helvetica Neue\", Helvetica, Arial, sans-serif;}.block{box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);padding: 10px;}</style></head><body><div class=\"block\"><h1>Hello!</h1><p>Please click the link below to reset the password</p><p><a href=\"" + callbackUrl + "\">Reset password</a></p><p><small>Thanks and regards,<br>Team Cafe Arts</small></p></div></body></html>");
                 return RedirectToAction("ForgotPasswordConfirmation", "Account");
             }
 

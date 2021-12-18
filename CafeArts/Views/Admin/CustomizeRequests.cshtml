@@ -71,7 +71,8 @@
                     <td style="background-color:@item.Color4">
                     </td>
                     <td>
-                        @Html.ActionLink("Delete", "DeleteCustomize", "Admin", new { id = item.CustomizeID }, new { @class = "btn btn-primary" })
+                        @Html.ActionLink("Delete", "DeleteCustomize", "Admin", new { id = item.CustomizeID }, new { @class = "btn btn-primary" })<br /><br />
+                        @Html.ActionLink("Create", "CreateCustomize", "Admin", new { id = item.CustomizeID }, new { @class = "btn btn-primary" })
                     </td>
 
 

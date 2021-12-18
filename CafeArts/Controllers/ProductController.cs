@@ -123,6 +123,7 @@ namespace CafeArts.Controllers
             return RedirectToAction("ProductDetails", new { id = ReviewInDB.ProdID });
         }
 
+        
         public async Task<ActionResult> CustomizeProduct()
         {
             var CustomModel = new Customize() { CategoriesForCustom = await _context.Categories.ToListAsync() };
@@ -133,7 +134,6 @@ namespace CafeArts.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> SubmitCustomize(Customize customizeModel)
         {
-            
 
             if (!ModelState.IsValid)
             {
@@ -143,7 +143,12 @@ namespace CafeArts.Controllers
 
             else
             {
+                var CurrentUser = User.Identity.GetUserId();
+                var usermodel = await _context.Users.SingleAsync(m => m.Id == CurrentUser);
+                customizeModel.Email = usermodel.Email;
+                customizeModel.FullName = usermodel.FirstName + " " + usermodel.LastName;
                 customizeModel.CreatedDate = DateTime.Now;
+                customizeModel.IsActive = true;
                 _context.Customizing.Add(customizeModel);
                 await _context.SaveChangesAsync();                
                 return RedirectToAction("RequestSuccess","Product", new { value = customizeModel.ContactNumber});

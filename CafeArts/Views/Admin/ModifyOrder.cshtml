@@ -15,7 +15,7 @@
     @Html.AntiForgeryToken()
     @Html.HiddenFor(m => m.OrderID)
 
-    @if (Model == null)
+    @if (Model == null || Model.OrderID == null)
     {
         @Html.LabelFor(m => m.OrderType)
         <select id="OrderType" name="OrderType" class="form-control">
@@ -26,6 +26,10 @@
         @Html.LabelFor(m => m.TotalAmount)
         @Html.TextBoxFor(m => m.TotalAmount, new { @class = "form-control" })<br />
     }
+
+    @Html.CheckBoxFor(m => m.IsCustomized)
+    @Html.LabelFor(m => m.IsCustomized)<br /><br />
+
 
     @Html.LabelFor(m => m.RazorPayKey)
     @Html.TextBoxFor(m => m.RazorPayKey, new { @class = "form-control" })

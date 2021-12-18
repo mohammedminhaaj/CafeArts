@@ -31,5 +31,8 @@ namespace CafeArts.Models
 
         public string WayBill { get; set; }
 
+        [Display(Name ="Is this a customized order?")]
+        public bool IsCustomized { get; set; }
+
     }
 }

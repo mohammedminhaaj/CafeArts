@@ -1,5 +1,6 @@
 ﻿using CafeArts.Models;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -15,15 +16,33 @@ namespace CafeArts.Controllers
     public class CartController : Controller
     {
         private ApplicationDbContext _context;
-        
+        private ApplicationUserManager _userManager;
 
         public CartController()
         {
             _context = new ApplicationDbContext();
         }
 
+        public ApplicationUserManager UserManager
+        {
+            get
+            {
+                return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
+            }
+            private set
+            {
+                _userManager = value;
+            }
+        }
+
         protected override void Dispose(bool disposing)
         {
+            if (_userManager != null)
+            {
+                _userManager.Dispose();
+                _userManager = null;
+            }
+
             _context.Dispose();
         }
 
@@ -320,6 +339,10 @@ namespace CafeArts.Controllers
             }
 
             await _context.SaveChangesAsync();
+
+            var callbackUrl = Url.Action("OrderPlaced", "Cart", new { id = order.OrderID }, protocol: Request.Url.Scheme);
+
+            await UserManager.SendEmailAsync(CurrentUser, "Order confirmation", "<!DOCTYPE html><html><head><style>*{font-family:\"Raleway\", \"Helvetica Neue\", Helvetica, Arial, sans-serif;}.block{box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);padding: 10px;}</style></head><body><div class=\"block\"><h1>Thank you!</h1><p>This is a confirmation email to notify that you have placed an order with us.</p><p>To view your order summary, please click <a href=\"" + callbackUrl + "\">here</a></p><p><small>Thanks and regards,<br>Team Cafe Arts</small></p></div></body></html>");
 
             return RedirectToAction("OrderPlaced","Cart", new { id = order.OrderID});
 

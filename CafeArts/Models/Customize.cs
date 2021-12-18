@@ -35,7 +35,6 @@ namespace CafeArts.Models
         public string Color4 { get; set; }
 
         [Display(Name = "Full name")]
-        [Required(ErrorMessage ="Enter a valid name")]
         public string FullName { get; set; }
 
         [Display(Name = "Contact number")]
@@ -46,13 +45,13 @@ namespace CafeArts.Models
         public string ContactNumber { get; set; }
 
         [Display(Name = "Email address")]
-        [Required(ErrorMessage = "Enter a valid email address")]
-        [EmailAddress]
         public string Email { get; set; }
 
         [Display(Name = "Notes")]
         public string CustomizeDescription { get; set; }
 
         public DateTime? CreatedDate { get; set; }
+
+        public bool IsActive { get; set; }
     }
 }

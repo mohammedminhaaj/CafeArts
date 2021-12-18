@@ -1,5 +1,6 @@
 ﻿using CafeArts.Models;
 using CafeArts.ViewModels;
+using Microsoft.AspNet.Identity.Owin;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -15,14 +16,32 @@ namespace CafeArts.Controllers
     public class AdminController : Controller
     {
         private ApplicationDbContext _context;
+        private ApplicationUserManager _userManager;
 
         public AdminController()
         {
             _context = new ApplicationDbContext();
         }
+        public ApplicationUserManager UserManager
+        {
+            get
+            {
+                return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
+            }
+            private set
+            {
+                _userManager = value;
+            }
+        }
 
         protected override void Dispose(bool disposing)
         {
+            if (_userManager != null)
+            {
+                _userManager.Dispose();
+                _userManager = null;
+            }
+
             _context.Dispose();
         }
         // GET: Admin
@@ -382,6 +401,11 @@ namespace CafeArts.Controllers
             OrderInDB.OrderStatus = "Delivered";
             OrderInDB.DeliveryDate = DateTime.Now;
             await _context.SaveChangesAsync();
+
+            var callbackUrl = Url.Action("Index", "Home","", protocol: Request.Url.Scheme);
+
+            await UserManager.SendEmailAsync(OrderInDB.MemberID, "Order confirmation", "<!DOCTYPE html><html><head><style>*{font-family:\"Raleway\", \"Helvetica Neue\", Helvetica, Arial, sans-serif;}.block{box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);padding: 10px;}</style></head><body><div class=\"block\"><h1>Thank you for shopping with us.</h1><p>We have delivered your product(s) at the mentioned address. We hope to see you soon.</p><p>Please take a few seconds to leave a review for the product(s) you ordered.</p><p>Visit us again at <a href=\"" + callbackUrl + "\">Cafe Arts</a></p><p><small>Thanks and regards,<br>Team Cafe Arts</small></p></div></body></html>");
+
             return RedirectToAction("PostConfirmationOrders", "Admin");
         }
 
@@ -445,6 +469,8 @@ namespace CafeArts.Controllers
             }
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> PostOrder(Order ordermodel)
         {
             if(!ModelState.IsValid)
@@ -459,12 +485,27 @@ namespace CafeArts.Controllers
                     ordermodel.OrderStatus = "Ordered";
                     ordermodel.CreatedDate = DateTime.Now;
                     ordermodel.WayBill = "NA";
+                    var user = await UserManager.FindByNameAsync(ordermodel.CustomerEmail);
+                    ordermodel.MemberID = user.Id;
                     if (ordermodel.OrderType == "Cash on delivery")
                     {
                         ordermodel.RazorPayKey = "Not available";
                         ordermodel.RPUniquePaymentID = "Not available";
                         ordermodel.TransactionID = "Not available";
                     }
+
+                    if(ordermodel.IsCustomized)
+                    {
+                        var DeleteCustomRequest = await  _context.Customizing.Where(m => m.Email == ordermodel.CustomerEmail).OrderByDescending(m => m.CustomizeID).FirstAsync();
+                        if (DeleteCustomRequest != null)
+                            DeleteCustomRequest.IsActive = false;
+                        await _context.SaveChangesAsync();
+                        var callbackUrl = Url.Action("Contact", "Home","", protocol: Request.Url.Scheme);
+
+                        await UserManager.SendEmailAsync(ordermodel.MemberID, "Order confirmation", "<!DOCTYPE html><html><head><style>*{font-family:\"Raleway\", \"Helvetica Neue\", Helvetica, Arial, sans-serif;}.block{box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);padding: 10px;}</style></head><body><div class=\"block\"><h1>Thank you!</h1><p>This is a confirmation email to notify that your order for customized product has been placed.</p><p>Please <a href=\"" + callbackUrl + "\">contact us</a> if you have any queries</p><p><small>Thanks and regards,<br>Team Cafe Arts</small></p></div></body></html>");
+
+                    }
+
                     _context.orders.Add(ordermodel);
                     await _context.SaveChangesAsync();
                     return RedirectToAction("Orders");
@@ -485,8 +526,24 @@ namespace CafeArts.Controllers
 
         public async Task<ActionResult> CustomizeRequests()
         {
-            var CustomizeModel = await _context.Customizing.Include(m => m.Categories).ToListAsync();
+            var CustomizeModel = await _context.Customizing.Include(m => m.Categories).Where(m => m.IsActive).ToListAsync();
             return View(CustomizeModel);
+        }
+
+        public async Task<ActionResult> CreateCustomize(int id)
+        {
+            var CustomModel = await _context.Customizing.SingleAsync(m => m.CustomizeID == id);
+            if (CustomModel == null)
+                return HttpNotFound();
+
+            var OrderModel = new Order()
+            {
+                CustomerName = CustomModel.FullName,
+                CustomerEmail = CustomModel.Email,
+                CustomerContact = CustomModel.ContactNumber,
+                IsCustomized = true
+            };
+            return View("ModifyOrder", OrderModel);
         }
 
         public async Task<ActionResult> DeleteCustomize(int id)
@@ -496,7 +553,7 @@ namespace CafeArts.Controllers
             if (RemoveModel == null)
                 return HttpNotFound();
 
-            _context.Customizing.Remove(RemoveModel);
+            RemoveModel.IsActive = false;
             await _context.SaveChangesAsync();
             return RedirectToAction("CustomizeRequests");
         }
