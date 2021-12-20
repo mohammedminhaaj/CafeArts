@@ -9,7 +9,7 @@
     <h1 class="h3 mb-0 text-gray-800">Customization requests</h1>
 </div>
 
-<table class="table table-bordered table-hover" width="100%">
+<table class="table table-bordered table-hover" id="customize-table" width="100%">
 
 
 
@@ -71,7 +71,8 @@
                     <td style="background-color:@item.Color4">
                     </td>
                     <td>
-                        @Html.ActionLink("Delete", "DeleteCustomize", "Admin", new { id = item.CustomizeID }, new { @class = "btn btn-primary" })<br /><br />
+                        @*@Html.ActionLink("Delete", "DeleteCustomize", "Admin", new { id = item.CustomizeID }, new { @class = "btn btn-primary js-delete" })*@
+                        <button data-order-id="@item.CustomizeID"class="btn btn-primary js-delete">Delete</button><br /><br />
                         @Html.ActionLink("Create", "CreateCustomize", "Admin", new { id = item.CustomizeID }, new { @class = "btn btn-primary" })
                     </td>
 
@@ -85,3 +86,17 @@
         }
     }
 </table>
+
+@section scripts
+    {
+    <script>
+        $(document).ready(function () {
+            $('#customize-table').on('click', '.js-delete', function () {
+                if (confirm("Are you sure you want to delete this order?")) {
+                    location.href = "/Admin/DeleteCustomize/" + $(this).attr("data-order-id")
+                    }
+            });
+
+        });
+    </script>
+}

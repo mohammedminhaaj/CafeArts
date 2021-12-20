@@ -61,14 +61,16 @@
 <br />
 @if (ViewBag.SingleOrderDetails.OrderStatus == "In transit")
 {
-    <a href="@Url.Action("CheckAsDelivered","Admin",new { id = ViewBag.SingleOrderDetails.OrderID })" class="btn btn-primary">Check as delivered</a>
+    @*<a href="@Url.Action("CheckAsDelivered","Admin",new { id = ViewBag.SingleOrderDetails.OrderID })" class="btn btn-primary">Check as delivered</a>*@
+    <button data-order-id="@ViewBag.SingleOrderDetails.OrderID" class="btn btn-primary js-checkdelivered">Check as delivered</button>
     <br />
     <br />
 }
 
 @if (!(ViewBag.SingleOrderDetails.OrderStatus == "Delivered" || ViewBag.SingleOrderDetails.OrderStatus == "Canceled"))
 {
-    <a href="@Url.Action("CancelOrder","Admin",new { id = ViewBag.SingleOrderDetails.OrderID })" class="btn btn-primary">Cancel order</a>
+    @*<a href="@Url.Action("CancelOrder","Admin",new { id = ViewBag.SingleOrderDetails.OrderID })" class="btn btn-primary">Cancel order</a>*@
+    <button data-order-id="@ViewBag.SingleOrderDetails.OrderID" class="btn btn-primary js-cancel">Cancel order</button>
     <br />
     <br />
 }
@@ -132,9 +134,23 @@ else
     <script>
         $(document).ready(function () {
             $('.js-waybill').on('click', function () {
-                var url = '@Url.Action("AddWayBill", "Admin")';
-                var value = $('.way-bill').val();
-                window.location.href = url + '?id=' + @ViewBag.SingleOrderDetails.OrderID+"&waybill=" + value;
+                if (confirm("Submit waybill? This action cannot be reversed!")) {
+                    var url = '@Url.Action("AddWayBill", "Admin")';
+                    var value = $('.way-bill').val();
+                    window.location.href = url + '?id=' + @ViewBag.SingleOrderDetails.OrderID+"&waybill=" + value;
+                }
+            });
+
+            $('.js-checkdelivered').on('click', function () {
+                if (confirm("Are you sure you want to check this order as delivered?")) {
+                    location.href = "/Admin/CheckAsDelivered/" + $(this).attr("data-order-id")
+                }
+            });
+
+            $('.js-cancel').on('click', function () {
+                if (confirm("Are you sure you want to cancel this order?")) {
+                    location.href = "/Admin/CancelOrder/" + $(this).attr("data-order-id")
+                }
             });
         });
     </script>

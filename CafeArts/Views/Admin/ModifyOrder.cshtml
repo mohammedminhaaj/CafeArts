@@ -55,6 +55,6 @@
     @Html.LabelFor(m => m.CustomerAddress)
     @Html.TextAreaFor(m => m.CustomerAddress, new { @class = "form-control" })<br />
 
-    <button type="submit" class="btn btn-primary">Submit</button>
+    <button type="submit" class="btn btn-primary" onclick="return confirm('Submit the order?')">Submit</button>
 </div>
 }

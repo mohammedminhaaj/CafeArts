@@ -19,6 +19,6 @@
     @Html.ValidationMessageFor(m => m.CategoryID)
     @Html.AntiForgeryToken()
     <br />
-    <button type="submit" class="btn btn-primary">Update</button>
+    <button type="submit" class="btn btn-primary" onclick="return confirm('Submit the category?')">Update</button>
 </div>
 }

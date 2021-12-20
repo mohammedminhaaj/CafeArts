@@ -56,8 +56,8 @@
     @Html.TextBoxFor(m => m.Products.ProductPrice, new { @class = "form-control" })<br />
     @Html.ValidationMessageFor(m => m.Products.ProductPrice)
 <span class="text-danger">
-    <p>Updating product price will cause incorrect information to be populated in customer's orders.</p>
-    <p>Please add a new product and mark this as inactive instead.</p>
+    Updating product price will cause incorrect information to be populated in customer's orders.<br />
+    Please add a new product and mark this as inactive instead.
 </span>
 
     @Html.LabelFor(m => m.Products.ProductQuantity)
@@ -73,7 +73,7 @@
     @Html.AntiForgeryToken()
 
 
-    <button type="submit" class="btn btn-primary">Modify</button>
+    <button type="submit" class="btn btn-primary" onclick="return confirm('Submit the product?')">Modify</button>
 
 
 </div>

@@ -12,7 +12,7 @@
 <a href="@Url.Action("ModifyOrder","Admin")" class="btn btn-primary">Create</a><br /><br />
 
 
-<table class="table table-bordered table-hover" width="100%">
+<table class="table table-bordered table-hover" id="orders" width="100%">
 
 
     @if (!Model.Any())
@@ -88,7 +88,8 @@
                         @{
                             if (item.OrderStatus == "Ordered")
                             {
-                                @Html.ActionLink("Confirm", "ConfirmOrder", "Admin", new { id = item.OrderID }, new { @class = "btn btn-primary" })
+                                @*@Html.ActionLink("Confirm", "ConfirmOrder", "Admin", new { id = item.OrderID }, new { @class = "btn btn-primary js-confirm" })*@
+                                <button data-order-id="@item.OrderID"class="btn btn-primary js-confirm">Confirm</button>
 
                             }
                             else
@@ -97,7 +98,7 @@
                             }
                         }
 
-                        @*<button type="button" class="btn btn-primary" value="UpdateCategory" onclick="location.href = '@Url.Action("UpdateCategory(item.CategoryID)","Admin")'">Edit</button>*@
+                        
                     </td>
                     <td>
                         <a href="@Url.Action("ModifyOrder","Admin", new { id = item.OrderID})" class="btn btn-primary">Edit</a>
@@ -115,5 +116,19 @@
         }
     }
 </table>
+
+@section scripts
+    {
+    <script>
+        $(document).ready(function () {
+            $('#orders').on('click', '.js-confirm', function () {
+                if (confirm("Are you sure you want to confirm this order?")) {
+                        location.href = "/Admin/ConfirmOrder/" + $(this).attr("data-order-id")
+                    }
+            });
+
+        });
+    </script>
+    }
 
 
