@@ -486,7 +486,10 @@ namespace CafeArts.Controllers
                     ordermodel.CreatedDate = DateTime.Now;
                     ordermodel.WayBill = "NA";
                     var user = await UserManager.FindByNameAsync(ordermodel.CustomerEmail);
-                    ordermodel.MemberID = user.Id;
+
+                    if(user != null)
+                        ordermodel.MemberID = user.Id;
+
                     if (ordermodel.OrderType == "Cash on delivery")
                     {
                         ordermodel.RazorPayKey = "Not available";
@@ -496,10 +499,13 @@ namespace CafeArts.Controllers
 
                     if(ordermodel.IsCustomized)
                     {
-                        var DeleteCustomRequest = await  _context.Customizing.Where(m => m.Email == ordermodel.CustomerEmail).OrderByDescending(m => m.CustomizeID).FirstAsync();
+                        var DeleteCustomRequest = await _context.Customizing.SingleAsync(m => m.CustomizeID == ordermodel.CustomizeID);
                         if (DeleteCustomRequest != null)
+                        {
                             DeleteCustomRequest.IsActive = false;
-                        await _context.SaveChangesAsync();
+                            await _context.SaveChangesAsync();
+                        }
+                            
                         var callbackUrl = Url.Action("Contact", "Home","", protocol: Request.Url.Scheme);
 
                         await UserManager.SendEmailAsync(ordermodel.MemberID, "Order confirmation", "<!DOCTYPE html><html><head><style>*{font-family:\"Raleway\", \"Helvetica Neue\", Helvetica, Arial, sans-serif;}.block{box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);padding: 10px;}</style></head><body><div class=\"block\"><h1>Thank you!</h1><p>This is a confirmation email to notify that your order for customized product has been placed.</p><p>Please <a href=\"" + callbackUrl + "\">contact us</a> if you have any queries</p><p><small>Thanks and regards,<br>Team Cafe Arts</small></p></div></body></html>");
@@ -541,7 +547,8 @@ namespace CafeArts.Controllers
                 CustomerName = CustomModel.FullName,
                 CustomerEmail = CustomModel.Email,
                 CustomerContact = CustomModel.ContactNumber,
-                IsCustomized = true
+                IsCustomized = true,
+                CustomizeID = CustomModel.CustomizeID
             };
             return View("ModifyOrder", OrderModel);
         }

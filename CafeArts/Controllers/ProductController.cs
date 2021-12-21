@@ -42,7 +42,7 @@ namespace CafeArts.Controllers
             if (search != null)
             {
                 
-                return View(products.Where(m => m.IsActive && (m.ProductDescription.Contains(search) || m.ProductName.Contains(search))));
+                return View(products.Where(m => m.IsActive && (m.ProductDescription.ToUpper().Contains(search.ToUpper()) || m.ProductName.ToUpper().Contains(search.ToUpper()) || m.ProductShortDescription.ToUpper().Contains(search.ToUpper()))));
             }
 
             else

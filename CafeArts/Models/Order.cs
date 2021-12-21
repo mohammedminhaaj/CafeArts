@@ -34,5 +34,10 @@ namespace CafeArts.Models
         [Display(Name ="Is this a customized order?")]
         public bool IsCustomized { get; set; }
 
+        [Display(Name ="Order ID of customized order")]
+        public int? CustomizeID { get; set; }
+        [ForeignKey("CustomizeID")]
+        public Customize CustomizedOrder { get; set; }
+
     }
 }

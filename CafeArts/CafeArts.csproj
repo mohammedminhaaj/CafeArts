@@ -379,6 +379,10 @@
     <Compile Include="Migrations\202112181533297_ChangeFromIsValidToIsActive.Designer.cs">
       <DependentUpon>202112181533297_ChangeFromIsValidToIsActive.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202112210646426_AddingCustomizedForeignKeytoOrder.cs" />
+    <Compile Include="Migrations\202112210646426_AddingCustomizedForeignKeytoOrder.Designer.cs">
+      <DependentUpon>202112210646426_AddingCustomizedForeignKeytoOrder.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ByteArrayToImageConverter.cs" />
@@ -2508,6 +2512,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202112181533297_ChangeFromIsValidToIsActive.resx">
       <DependentUpon>202112181533297_ChangeFromIsValidToIsActive.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202112210646426_AddingCustomizedForeignKeytoOrder.resx">
+      <DependentUpon>202112210646426_AddingCustomizedForeignKeytoOrder.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
